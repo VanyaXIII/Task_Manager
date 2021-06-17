@@ -1,7 +1,7 @@
-package com.example.taskmanager.utils
+package com.example.taskmanager.dates
 
-import com.example.taskmanager.utils.date_utils.doesDatesHaveSameDay
-import com.example.taskmanager.utils.date_utils.formatMinutes
+import com.example.taskmanager.dates.date_utils.doesDatesHaveSameDay
+import com.example.taskmanager.dates.date_utils.formatMinutes
 import java.util.*
 
 class ExecutionPeriod(_startDate : Calendar = Calendar.getInstance(), _endDate : Calendar = Calendar.getInstance()){

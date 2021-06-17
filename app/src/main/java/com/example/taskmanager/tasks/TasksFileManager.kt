@@ -1,9 +1,7 @@
-package com.example.taskmanager.utils
+package com.example.taskmanager.tasks
 
 import android.content.Context
 import com.example.taskmanager.R
-import com.example.taskmanager.tasks.Task
-import com.example.taskmanager.tasks.TaskList
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 

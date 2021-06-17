@@ -8,8 +8,8 @@ import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.taskmanager.tasks.Task
 import com.example.taskmanager.tasks.TaskList
-import com.example.taskmanager.utils.TasksFileManager
-import com.example.taskmanager.utils.date_utils.DatePickerCreator
+import com.example.taskmanager.tasks.TasksFileManager
+import com.example.taskmanager.utils.DatePickerCreator
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         val taskList = TaskList(TasksFileManager(null, this).load())
         val calendarButton= findViewById<Button>(R.id.calendarButton)
         val list : ListView = findViewById(R.id.listView)
-        calendarButton.setOnClickListener {DatePickerCreator(this, date, taskList, list).setDate()}
+        calendarButton.setOnClickListener { DatePickerCreator(this, date, taskList, list).setDate()}
         var tasks: ArrayList<Task>
         val addingBtn = findViewById<Button>(R.id.addingBtn)
         val executingBtn = findViewById<Button>(R.id.executingBtn)

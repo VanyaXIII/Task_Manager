@@ -10,9 +10,9 @@ import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import com.example.taskmanager.tasks.Task
 import com.example.taskmanager.tasks.TaskList
-import com.example.taskmanager.utils.ExecutionPeriod
-import com.example.taskmanager.utils.TasksFileManager
-import com.example.taskmanager.utils.date_utils.DatePickerCreator
+import com.example.taskmanager.dates.ExecutionPeriod
+import com.example.taskmanager.tasks.TasksFileManager
+import com.example.taskmanager.utils.DatePickerCreator
 import java.util.*
 
 
@@ -51,8 +51,8 @@ class TaskCreatingActivity : AppCompatActivity() {
             .show()
     }
 
-    var t =
-        OnTimeSetListener { view, hourOfDay, minute ->
+    private var t =
+        OnTimeSetListener { _, hourOfDay, minute ->
             dateAndTime[Calendar.HOUR_OF_DAY] = hourOfDay
             dateAndTime[Calendar.MINUTE] = minute
         }

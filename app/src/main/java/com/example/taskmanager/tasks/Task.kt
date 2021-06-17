@@ -1,9 +1,9 @@
 package com.example.taskmanager.tasks
 
-import com.example.taskmanager.utils.ExecutionPeriod
+import com.example.taskmanager.dates.ExecutionPeriod
 import com.example.taskmanager.utils.JsonAble
-import com.example.taskmanager.utils.date_utils.doesDatesHaveSameDay
-import com.example.taskmanager.utils.date_utils.minus
+import com.example.taskmanager.dates.date_utils.doesDatesHaveSameDay
+import com.example.taskmanager.dates.date_utils.minus
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
