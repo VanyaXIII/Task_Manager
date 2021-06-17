@@ -17,11 +17,19 @@ class TasksFileManager(private val taskList: TaskList?, private val context: Con
     }
 
     fun load(): ArrayList<Task> {
-        val inputStream = context.openFileInput(context.getString(R.string.path_to_json_task_list))
-        val bytes = ByteArray(inputStream.available())
-        inputStream.read(bytes)
-        val jsonString = String(bytes)
-        val mapper = jacksonObjectMapper()
-        return mapper.readValue(jsonString)
+        return try {
+
+            val inputStream =
+                context.openFileInput(context.getString(R.string.path_to_json_task_list))
+            val bytes = ByteArray(inputStream.available())
+            inputStream.read(bytes)
+            val jsonString = String(bytes)
+            val mapper = jacksonObjectMapper()
+            mapper.readValue(jsonString)
+        } catch (e : Exception){
+            val emptyArray = ArrayList<Task>()
+            TasksFileManager(TaskList(emptyArray), context)
+            emptyArray
+        }
     }
 }
