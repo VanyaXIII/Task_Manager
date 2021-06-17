@@ -2,7 +2,6 @@ package com.example.taskmanager
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.CalendarView
@@ -23,7 +22,6 @@ class MainActivity : AppCompatActivity() {
         var tasks: ArrayList<Task>
         var c : Calendar = Calendar.getInstance()
         calendar.setOnDateChangeListener { _, year, month, dayOfMonth ->  c = GregorianCalendar(year, month, dayOfMonth)
-            Log.d("Test", c.toString())
             tasks = taskList.getTaskListByDay(c).tasks
             list.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, tasks)
         }
