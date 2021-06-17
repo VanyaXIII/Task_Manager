@@ -13,11 +13,12 @@ import com.example.taskmanager.utils.TasksFileManager
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
+    private var dateAndTime = Calendar.getInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val taskList = TaskList(TasksFileManager(null, this).load())
-        val calendar : CalendarView = findViewById(R.id.calendarView)
+        val calendarButton= findViewById<Button>(R.id.calendarButton)
         val list : ListView = findViewById(R.id.listView)
         var tasks: ArrayList<Task>
         var c : Calendar = Calendar.getInstance()
