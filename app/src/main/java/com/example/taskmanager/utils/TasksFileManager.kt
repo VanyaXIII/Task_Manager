@@ -23,6 +23,7 @@ class TasksFileManager(private val taskList: TaskList?, private val context: Con
                 context.openFileInput(context.getString(R.string.path_to_json_task_list))
             val bytes = ByteArray(inputStream.available())
             inputStream.read(bytes)
+            inputStream.close()
             val jsonString = String(bytes)
             val mapper = jacksonObjectMapper()
             mapper.readValue(jsonString)

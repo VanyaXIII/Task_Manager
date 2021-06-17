@@ -2,7 +2,8 @@ package com.example.taskmanager.tasks
 
 import com.example.taskmanager.utils.ExecutionPeriod
 import com.example.taskmanager.utils.JsonAble
-import com.example.taskmanager.utils.minus
+import com.example.taskmanager.utils.date_utils.doesDatesHaveSameDay
+import com.example.taskmanager.utils.date_utils.minus
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -42,6 +43,10 @@ data class Task(@JsonIgnore private val _description: String = "Nothing to do") 
         isDone = true
     }
 
+    fun doHaveSameDateWith(date : Calendar) : Boolean{
+        return doesDatesHaveSameDay(executionPeriod.startDate, date)
+    }
+
     override fun toJson(): String {
         val mapper = jacksonObjectMapper()
         return mapper.writeValueAsString(this)
@@ -49,11 +54,9 @@ data class Task(@JsonIgnore private val _description: String = "Nothing to do") 
 
     override fun toString(): String {
         val status = if (isDone) "Выполнено" else "Не выполнено"
-        val cal = getTimeUntilEnding()
         return "Описание: $description | Статус: $status \n" +
-                "Время до конца выполнения ${cal[Calendar.HOUR_OF_DAY]}:${cal[Calendar.MINUTE]}"
+                "Время выполнения: $executionPeriod"
     }
-
 
 }
 

@@ -1,4 +1,4 @@
-package com.example.taskmanager.utils
+package com.example.taskmanager.utils.date_utils
 
 import java.util.*
 
@@ -20,4 +20,8 @@ operator fun Calendar.plus(calendar: Calendar) : Calendar {
         this[Calendar.MINUTE] + calendar[Calendar.MINUTE],
         this[Calendar.SECOND] + calendar[Calendar.SECOND],
     )
+}
+
+fun doesDatesHaveSameDay(date1 : Calendar, date2 : Calendar) : Boolean{
+    return ((date1[Calendar.YEAR] == date2[Calendar.YEAR]) and (date1[Calendar.DAY_OF_YEAR] == date2[Calendar.DAY_OF_YEAR]))
 }

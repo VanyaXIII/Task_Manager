@@ -41,13 +41,17 @@
 
         <Button
             android:id="@+id/addingBtn"
+            android:layout_marginStart="8dp"
             android:layout_width="wrap_content"
+            android:layout_marginEnd="4dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="По добавлению" />
 
         <Button
             android:id="@+id/executingBtn"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="4dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -59,8 +63,9 @@
         android:id="@+id/createTaskBtn"
         android:layout_width="141dp"
         android:layout_height="38dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginBottom="4dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:text="Добавить"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -69,6 +74,8 @@
         android:id="@+id/linearLayout2"
         android:layout_width="411dp"
         android:layout_height="74dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -77,7 +84,10 @@
         <Button
             android:id="@+id/calendarButton"
             android:layout_width="71dp"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:paddingStart="16dp" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

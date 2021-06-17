@@ -7,15 +7,16 @@ class TaskComparators {
 
     companion object {
 
+        private val parameters = arrayOf(Calendar.YEAR, Calendar.MONTH, Calendar.DAY_OF_MONTH, Calendar.HOUR_OF_DAY, Calendar.MINUTE)
+
         val creatingDateComparator = Comparator<Task> { task1, task2 ->
-            operator fun Task.compareTo(other: Task): Int{
-                val parameters = arrayOf(1,2,5,11,12)
-                for (i in parameters){
-                    if(this.creatingDate[i]>other.creatingDate[i]) return 1
-                    if(this.creatingDate[i]<other.creatingDate[i]) return -1
+            operator fun Task.compareTo(other: Task): Int {
+                for (i in parameters) {
+                    if (this.creatingDate[i] > other.creatingDate[i]) return 1
+                    if (this.creatingDate[i] < other.creatingDate[i]) return -1
                 }
-                if(this.isPriority>other.isPriority) return 1
-                if(this.isPriority<other.isPriority) return -1
+                if (this.isPriority > other.isPriority) return 1
+                if (this.isPriority < other.isPriority) return -1
                 return 0
             }
             when {
@@ -26,14 +27,13 @@ class TaskComparators {
         }
 
         val executionPeriodComparator = Comparator<Task> { task1, task2 ->
-            operator fun Task.compareTo(other: Task): Int{
-                val parameters = arrayOf(1,2,5,11,12)
-                for (i in parameters){
-                    if(this.executionPeriod.startDate[i]>other.executionPeriod.startDate[i]) return 1
-                    if(this.executionPeriod.startDate[i]<other.executionPeriod.startDate[i]) return -1
+            operator fun Task.compareTo(other: Task): Int {
+                for (i in parameters) {
+                    if (this.executionPeriod.startDate[i] > other.executionPeriod.startDate[i]) return 1
+                    if (this.executionPeriod.startDate[i] < other.executionPeriod.startDate[i]) return -1
                 }
-                if(this.isPriority>other.isPriority) return 1
-                if(this.isPriority<other.isPriority) return -1
+                if (this.isPriority > other.isPriority) return 1
+                if (this.isPriority < other.isPriority) return -1
                 return 0
             }
             when {
