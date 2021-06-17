@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Task Manager</string>
+    <string name="path_to_json_task_list">task-list.json</string>
+    <string name="button">Button</string>
+</resources>
