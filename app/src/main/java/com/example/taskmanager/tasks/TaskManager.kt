@@ -16,12 +16,12 @@ class TaskManager(taskList: TaskList = TaskList(HashSet())) {
             if (mapOfSets[taskDate] == null) mapOfSets[taskDate] = HashSet()
             mapOfSets[taskDate]?.add(task)
         }
-        for (key in mapOfSets.keys) {
-            tasksMap[key] = TaskList(mapOfSets[key], true)
+        for(key in mapOfSets.keys){
+           tasksMap[key] = TaskList(mapOfSets[key], true)
         }
     }
 
-    fun getTaskListByDay(date: Calendar): TaskList {
+    fun getTaskListByDay(date : Calendar) : TaskList{
         val dayAndYear = date.getDayAndYear()
         return if (tasksMap[dayAndYear] == null)
             TaskList(HashSet())

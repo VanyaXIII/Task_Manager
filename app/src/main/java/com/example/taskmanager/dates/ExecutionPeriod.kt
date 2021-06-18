@@ -28,9 +28,9 @@ class ExecutionPeriod(_startDate : Calendar = Calendar.getInstance(), _endDate :
         return if (doesDatesHaveSameDay(startDate, endDate))
             "${startDate[Calendar.HOUR_OF_DAY]}:${formatMinutes(startDate[Calendar.MINUTE])} - ${endDate[Calendar.HOUR_OF_DAY]}:${formatMinutes(endDate[Calendar.MINUTE])}"
         else
-            "${startDate[Calendar.MONTH]}.${startDate[Calendar.DAY_OF_MONTH]} " +
+            "${startDate[Calendar.MONTH] + 1}.${startDate[Calendar.DAY_OF_MONTH]} " +
                     "${startDate[Calendar.HOUR_OF_DAY]}:${formatMinutes(startDate[Calendar.MINUTE])} " +
-                    "- ${startDate[Calendar.MONTH]}.${startDate[Calendar.DAY_OF_MONTH]} " +
+                    "- ${endDate[Calendar.MONTH] + 1}.${endDate[Calendar.DAY_OF_MONTH]} " +
                     "${endDate[Calendar.HOUR_OF_DAY]}:${formatMinutes(endDate[Calendar.MINUTE])}"
     }
 
