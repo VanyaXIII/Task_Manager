@@ -17,6 +17,6 @@ fun tasksToStrings(tasks:  ArrayList<Task>) : ArrayList<String>{
 
 fun initTestingTasks(tasksAsJson : String, context : Context){
     val mapper = jacksonObjectMapper()
-    val tasks : ArrayList<Task> = mapper.readValue(tasksAsJson)
+    val tasks : HashSet<Task> = mapper.readValue(tasksAsJson)
     TasksFileManager(TaskList(tasks), context).save()
 }

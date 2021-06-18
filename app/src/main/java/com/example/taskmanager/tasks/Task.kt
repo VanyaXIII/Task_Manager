@@ -1,9 +1,9 @@
 package com.example.taskmanager.tasks
 
 import com.example.taskmanager.dates.ExecutionPeriod
-import com.example.taskmanager.utils.JsonAble
 import com.example.taskmanager.dates.date_utils.doesDatesHaveSameDay
 import com.example.taskmanager.dates.date_utils.minus
+import com.example.taskmanager.utils.JsonAble
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -56,6 +56,10 @@ data class Task(@JsonIgnore private val _description: String = "Nothing to do") 
         val status = if (isDone) "Выполнено" else "Не выполнено"
         return "Описание: $description | Статус: $status \n" +
                 "Время выполнения: $executionPeriod"
+    }
+
+    override fun hashCode(): Int {
+        return creatingDate.hashCode() //может рухнуть:)
     }
 
 }

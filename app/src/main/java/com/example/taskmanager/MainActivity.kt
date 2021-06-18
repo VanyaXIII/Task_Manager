@@ -8,6 +8,7 @@ import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.taskmanager.tasks.Task
 import com.example.taskmanager.tasks.TaskList
+import com.example.taskmanager.tasks.TaskManager
 import com.example.taskmanager.tasks.TasksFileManager
 import com.example.taskmanager.utils.DatePickerCreator
 import java.util.*
@@ -20,15 +21,16 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val taskList = TaskList(TasksFileManager(null, this).load())
+        val taskManager = TaskManager(taskList)
         val calendarButton= findViewById<Button>(R.id.calendarButton)
         val list : ListView = findViewById(R.id.listView)
-        calendarButton.setOnClickListener { DatePickerCreator(this, date, taskList, list).setDate()}
+        calendarButton.setOnClickListener { DatePickerCreator(this, date, taskManager, list).setDate()}
         var tasks: ArrayList<Task>
         val addingBtn = findViewById<Button>(R.id.addingBtn)
         val executingBtn = findViewById<Button>(R.id.executingBtn)
-        addingBtn.setOnClickListener { tasks = taskList.getTaskListByDay(date).tasksByDate
+        addingBtn.setOnClickListener { tasks = taskManager.getTaskListByDay(date).tasksByDate
             list.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, tasks)}
-        executingBtn.setOnClickListener {  tasks = taskList.getTaskListByDay(date).tasksByExTime
+        executingBtn.setOnClickListener {  tasks = taskManager.getTaskListByDay(date).tasksByExTime
             list.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, tasks)}
         val creatingBtn = findViewById<Button>(R.id.createTaskBtn)
         creatingBtn.setOnClickListener {

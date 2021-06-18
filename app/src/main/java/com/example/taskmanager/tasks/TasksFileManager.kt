@@ -9,14 +9,16 @@ class TasksFileManager(private val taskList: TaskList?, private val context: Con
 
     fun save() {
         val jsonString = taskList?.getTasksAsJson()
-        val outputStream = context.openFileOutput(context.getString(R.string.path_to_json_task_list), Context.MODE_PRIVATE)
+        val outputStream = context.openFileOutput(
+            context.getString(R.string.path_to_json_task_list),
+            Context.MODE_PRIVATE
+        )
         outputStream.write(jsonString?.toByteArray())
         outputStream.close()
     }
 
-    fun load(): ArrayList<Task> {
+    fun load(): HashSet<Task> {
         return try {
-
             val inputStream =
                 context.openFileInput(context.getString(R.string.path_to_json_task_list))
             val bytes = ByteArray(inputStream.available())
@@ -24,11 +26,10 @@ class TasksFileManager(private val taskList: TaskList?, private val context: Con
             inputStream.close()
             val jsonString = String(bytes)
             val mapper = jacksonObjectMapper()
-            mapper.readValue(jsonString)
-        } catch (e : Exception){
-            val emptyArray = ArrayList<Task>()
-            TasksFileManager(TaskList(emptyArray), context)
-            emptyArray
+            return mapper.readValue(jsonString)
+        } catch (e: Exception) {
+            TasksFileManager(TaskList(HashSet()), context)
+            HashSet()
         }
     }
 }

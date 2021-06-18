@@ -25,3 +25,7 @@ operator fun Calendar.plus(calendar: Calendar) : Calendar {
 fun doesDatesHaveSameDay(date1 : Calendar, date2 : Calendar) : Boolean{
     return ((date1[Calendar.YEAR] == date2[Calendar.YEAR]) and (date1[Calendar.DAY_OF_YEAR] == date2[Calendar.DAY_OF_YEAR]))
 }
+
+fun Calendar.getDayAndYear() : Pair<Int, Int>{
+    return Pair(this[Calendar.YEAR], this[Calendar.DAY_OF_YEAR])
+}

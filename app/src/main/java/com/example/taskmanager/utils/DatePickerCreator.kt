@@ -6,12 +6,12 @@ import android.app.DatePickerDialog.OnDateSetListener
 import android.content.Context
 import android.widget.ArrayAdapter
 import android.widget.ListView
-import com.example.taskmanager.tasks.TaskList
+import com.example.taskmanager.tasks.TaskManager
 import java.util.*
 
 class DatePickerCreator(
     private val context: Context, private val calender: Calendar,
-    private val taskList: TaskList? = null, private val list: ListView? = null
+    private val taskManager: TaskManager? = null, private val list: ListView? = null
 ) {
 
 
@@ -33,9 +33,11 @@ class DatePickerCreator(
     }
 
     private fun updateListView(){
-        if ((list != null) and (taskList != null)) {
-            val tasks = taskList!!.getTaskListByDay(calender).tasks
-            list!!.adapter = ArrayAdapter(context, R.layout.simple_list_item_1, tasks)
+        if ((list != null) and (taskManager != null)) {
+            val tasks = taskManager!!.getTaskListByDay(calender).tasks
+            if (tasks != null) {
+                list!!.adapter = ArrayAdapter(context, R.layout.simple_list_item_1, tasks.toArray())
+            }
         }
     }
 
