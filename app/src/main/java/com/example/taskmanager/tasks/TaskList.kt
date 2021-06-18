@@ -7,15 +7,16 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashSet
 
-class TaskList(var tasks: HashSet<Task>? = HashSet()) : JsonAble {
+class TaskList(var tasks: HashSet<Task>? = HashSet(), private val doSorting: Boolean = false) :
+    JsonAble {
 
     var tasksByDate = ArrayList<Task>()
     var tasksByExTime = ArrayList<Task>()
 
     init {
-        updateSortedLists()
         if (tasks == null)
             tasks = HashSet()
+        updateSortedLists()
     }
 
     fun addTask(task: Task) {
@@ -29,17 +30,12 @@ class TaskList(var tasks: HashSet<Task>? = HashSet()) : JsonAble {
         tasksByDate.remove(task)
     }
 
-    fun getTaskListByDay(date: Calendar) : TaskList{
-        val res = TaskList()
-        res.tasks = HashSet(tasks?.filter { doHaveSameDays(it, date) })
-        res.tasksByDate = ArrayList(tasksByDate.filter { doHaveSameDays(it, date)})
-        res.tasksByExTime = ArrayList(tasksByExTime.filter { doHaveSameDays(it, date)})
-        return res
-    }
 
     private fun updateSortedLists() {
-        tasksByDate = ArrayList(tasks?.sortedWith(TaskComparators.creatingDateComparator))
-        tasksByExTime = ArrayList(tasks?.sortedWith(TaskComparators.executionPeriodComparator))
+        if (doSorting) {
+            tasksByDate = ArrayList(tasks?.sortedWith(TaskComparators.creatingDateComparator))
+            tasksByExTime = ArrayList(tasks?.sortedWith(TaskComparators.executionPeriodComparator))
+        }
     }
 
     fun getTasksAsJson(): String {

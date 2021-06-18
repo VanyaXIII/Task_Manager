@@ -5,7 +5,7 @@ import com.example.taskmanager.R
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 
-class TasksFileManager(private val taskList: TaskList?, private val context: Context) {
+class TasksFileHandler(private val taskList: TaskList?, private val context: Context) {
 
     fun save() {
         val jsonString = taskList?.getTasksAsJson()
@@ -28,7 +28,7 @@ class TasksFileManager(private val taskList: TaskList?, private val context: Con
             val mapper = jacksonObjectMapper()
             return mapper.readValue(jsonString)
         } catch (e: Exception) {
-            TasksFileManager(TaskList(HashSet()), context)
+            TasksFileHandler(TaskList(HashSet()), context)
             HashSet()
         }
     }

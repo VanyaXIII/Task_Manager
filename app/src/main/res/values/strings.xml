@@ -2,4 +2,10 @@
     <string name="app_name">Task Manager</string>
     <string name="path_to_json_task_list">task-list.json</string>
     <string name="button">Button</string>
+    <string name="notification_channel_id">Task_Manager_Channel</string>
+    <string name="notification_channel_name">Task Manager notifications</string>
+    <string name="notification_title">Время на выполнение задания подходит к концу</string>
+    <string name="notification_message">До конца задания осталось</string>
+    <string name="ticker_text">Test</string>
+    <string name="foreground_id">101</string>
 </resources>

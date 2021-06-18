@@ -6,10 +6,11 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.taskmanager.notifications.NotificationService
 import com.example.taskmanager.tasks.Task
 import com.example.taskmanager.tasks.TaskList
 import com.example.taskmanager.tasks.TaskManager
-import com.example.taskmanager.tasks.TasksFileManager
+import com.example.taskmanager.tasks.TasksFileHandler
 import com.example.taskmanager.utils.DatePickerCreator
 import java.util.*
 
@@ -20,7 +21,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val taskList = TaskList(TasksFileManager(null, this).load())
+        val taskList = TaskList(TasksFileHandler(null, this).load())
+        startNotificationService()
         val taskManager = TaskManager(taskList)
         val calendarButton= findViewById<Button>(R.id.calendarButton)
         val list : ListView = findViewById(R.id.listView)
@@ -36,5 +38,10 @@ class MainActivity : AppCompatActivity() {
         creatingBtn.setOnClickListener {
             startActivity(Intent(this, TaskCreatingActivity::class.java))
         }
+    }
+
+    private fun startNotificationService(){
+        val serviceIntent  = Intent(this, NotificationService::class.java)
+        startService(serviceIntent)
     }
 }

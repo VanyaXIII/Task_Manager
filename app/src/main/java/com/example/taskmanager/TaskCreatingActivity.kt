@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.taskmanager.dates.ExecutionPeriod
 import com.example.taskmanager.tasks.Task
 import com.example.taskmanager.tasks.TaskList
-import com.example.taskmanager.tasks.TasksFileManager
+import com.example.taskmanager.tasks.TasksFileHandler
 import com.example.taskmanager.utils.DatePickerCreator
 import java.util.*
 
@@ -25,7 +25,7 @@ class TaskCreatingActivity : AppCompatActivity() {
         setContentView(R.layout.activity_task_creating)
         DatePickerCreator(this, dateAndTime).setDate()
         setTime()
-        val tasks = TasksFileManager(null, this).load()
+        val tasks = TasksFileHandler(null, this).load()
         val taskList = TaskList(tasks)
         val desc = findViewById<EditText>(R.id.editTaskDescription)
         val backBtn = findViewById<Button>(R.id.toListBtn)
@@ -36,7 +36,7 @@ class TaskCreatingActivity : AppCompatActivity() {
             a.add(Calendar.HOUR_OF_DAY, 2)
             val task = Task(desc.text.toString(), ExecutionPeriod(dateAndTime, a))
             taskList.addTask(task)
-            TasksFileManager(taskList, this).save()
+            TasksFileHandler(taskList, this).save()
             Log.d("Test", task.toJson())
         }
     }
