@@ -8,4 +8,9 @@
     <string name="notification_message">До конца задания осталось</string>
     <string name="ticker_text">Test</string>
     <string name="foreground_id">101</string>
+    <string name="notification_id">121</string>
+    <string name="foreground_notification_title">Ближайшая задача: %1$s</string>
+    <string name="foreground_notification_text">Время выполнения: %1$s</string>
+    <string name="task_notification_text">До конца времени выполнения осталось: %1$d минут</string>
+    <string name="task_notification_title">Поторопитесь выполнить задачу: %1$s</string>
 </resources>

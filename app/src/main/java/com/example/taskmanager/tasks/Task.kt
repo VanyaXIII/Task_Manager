@@ -1,6 +1,7 @@
 package com.example.taskmanager.tasks
 
 import com.example.taskmanager.dates.ExecutionPeriod
+import com.example.taskmanager.dates.date_utils.NotificationTime
 import com.example.taskmanager.dates.date_utils.doesDatesHaveSameDay
 import com.example.taskmanager.dates.date_utils.minus
 import com.example.taskmanager.utils.JsonAble
@@ -27,11 +28,22 @@ data class Task(@JsonIgnore private val _description: String = "Nothing to do") 
     @JsonProperty("isTaskDone")
     var isDone: Boolean = false
 
+    @JsonProperty("notificationParams")
+    var notificationParams : NotificationTime = NotificationTime(this)
+        set(value) {
+            field = if (value.notificationTime > executionPeriod.endDate)
+                NotificationTime(this)
+            else
+                value
+        }
+
+
     constructor(description: String, executionPeriod: ExecutionPeriod) : this(description) {
         this.executionPeriod = executionPeriod
+        notificationParams = NotificationTime(this)
     }
 
-    private fun getTimeUntilEnding() : Calendar {
+    fun getTimeUntilEnding() : Calendar {
        return executionPeriod.endDate - executionPeriod.startDate
     }
 
@@ -52,6 +64,10 @@ data class Task(@JsonIgnore private val _description: String = "Nothing to do") 
         return mapper.writeValueAsString(this)
     }
 
+    fun onNotificationSent(){
+        notificationParams.notified = true
+    }
+
     override fun toString(): String {
         val status = if (isDone) "Выполнено" else "Не выполнено"
         return "Описание: $description | Статус: $status \n" +
@@ -60,6 +76,23 @@ data class Task(@JsonIgnore private val _description: String = "Nothing to do") 
 
     override fun hashCode(): Int {
         return creatingDate.hashCode() //может рухнуть:)
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Task
+
+        if (_description != other._description) return false
+        if (description != other.description) return false
+        if (creatingDate != other.creatingDate) return false
+        if (isPriority != other.isPriority) return false
+        if (executionPeriod != other.executionPeriod) return false
+        if (isDone != other.isDone) return false
+        if (notificationParams != other.notificationParams) return false
+
+        return true
     }
 
 }

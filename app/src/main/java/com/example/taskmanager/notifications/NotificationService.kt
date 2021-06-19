@@ -9,6 +9,7 @@ import android.os.IBinder
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.PRIORITY_MIN
+import androidx.core.app.NotificationManagerCompat
 import com.example.taskmanager.MainActivity
 import com.example.taskmanager.R
 import com.example.taskmanager.tasks.Task
@@ -39,31 +40,31 @@ class NotificationService : Service() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
-        val channelId = createNotificationChannel(
+        val foregroundChannelId = createNotificationChannel(
             getString(R.string.notification_channel_id),
             getString(R.string.notification_channel_name)
         )
 
         val notificationIntent = Intent(this, MainActivity::class.java)
         val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0)
-        val notificationBuilder = NotificationCompat.Builder(this, channelId)
-        val notification = notificationBuilder.setOngoing(true)
-            .setPriority(PRIORITY_MIN)
-            .setContentTitle(getString(R.string.notification_title))
-            .setContentText(getString(R.string.notification_message))
-            .setContentIntent(pendingIntent)
-            .setCategory(Notification.CATEGORY_SERVICE)
-            .build()
+        val foregroundNotificationBuilder = NotificationCompat.Builder(this, foregroundChannelId)
+        val foregroundNotification = getForegroundNotification(foregroundNotificationBuilder, pendingIntent)
+
+
+        val taskChannelId = createNotificationChannel("Qwerty", "Qwerty")
+
+        val taskNotificationBuilder = NotificationCompat.Builder(this, taskChannelId)
 
 
         Thread {
             runBlocking {
-                launch { checkForegroundNotification(notificationBuilder, pendingIntent) }
+                launch { checkForegroundNotification(foregroundNotificationBuilder, pendingIntent) }
                 launch { checkNewTasks() }
+//                launch { checkTasksNotifications(taskNotificationBuilder, pendingIntent) }
             }
         }.start()
 
-        startForeground(getString(R.string.foreground_id).toInt(), notification)
+        startForeground(getString(R.string.foreground_id).toInt(), foregroundNotification)
 
         return START_STICKY
     }
@@ -72,10 +73,10 @@ class NotificationService : Service() {
     private fun createNotificationChannel(channelId: String, channelName: String): String {
         val channel = NotificationChannel(
             channelId,
-            channelName, NotificationManager.IMPORTANCE_NONE
+            channelName, NotificationManager.IMPORTANCE_DEFAULT
         )
         channel.lightColor = Color.BLUE
-        channel.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
+        channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
         val service = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         service.createNotificationChannel(channel)
         return channelId
@@ -88,30 +89,16 @@ class NotificationService : Service() {
     private fun updateTasksQueue() {
         if (tasksQueue.size == 0)
             return
-        while (tasksQueue.first().executionPeriod.endDate < Calendar.getInstance())
+        while ((tasksQueue.size != 0) and (tasksQueue.first().executionPeriod.endDate < Calendar.getInstance()))
             tasksQueue.removeFirst()
     }
 
-    private fun getFirstUncompletedTask(): Task {
+    private fun getFirstUncompletedTask(): Task? {
+        if (tasksQueue.size == 0)
+            return null
         while ((tasksQueue.size != 0) and (tasksQueue.first().isDone))
             tasksQueue.removeFirst()
         return tasksQueue.first()
-    }
-
-    private fun getForegroundNotification(
-        notificationBuilder: NotificationCompat.Builder,
-        pendingIntent: PendingIntent
-    ): Notification {
-        updateTasksQueue()
-        val firstUncompletedTask = getFirstUncompletedTask()
-        return notificationBuilder.setOngoing(true)
-            .setSmallIcon(R.mipmap.ic_launcher)
-            .setPriority(PRIORITY_MIN)
-            .setContentTitle("Информация о ближайшей задаче")
-            .setContentText(firstUncompletedTask.executionPeriod.toString())
-            .setContentIntent(pendingIntent)
-            .setCategory(Notification.CATEGORY_SERVICE)
-            .build()
     }
 
     private fun notifyForeground(notification: Notification) {
@@ -141,4 +128,62 @@ class NotificationService : Service() {
         }
     }
 
+    private suspend fun checkTasksNotifications(
+        notificationBuilder: NotificationCompat.Builder,
+        pendingIntent: PendingIntent
+    ) {
+        while (true) {
+            delay(180000L)
+            for (task in taskList.tasks!!)
+                if ((Calendar.getInstance() > task.notificationParams.notificationTime)
+                    and (!task.notificationParams.notified)) {
+                    sendTaskNotification(getTaskNotification(task, notificationBuilder, pendingIntent))
+                }
+
+        }
+    }
+
+    private fun sendTaskNotification(notification: Notification) {
+        with(NotificationManagerCompat.from(this)) {
+            notify(getString(R.string.notification_id).toInt(), notification)
+        }
+    }
+
+    private fun getForegroundNotification(
+        notificationBuilder: NotificationCompat.Builder,
+        pendingIntent: PendingIntent
+    ): Notification {
+        updateTasksQueue()
+        val firstUncompletedTask = getFirstUncompletedTask()
+        val title =
+            getString(R.string.foreground_notification_title, firstUncompletedTask?.description ?: "Задач нет")
+        val text =
+            getString(R.string.foreground_notification_text, firstUncompletedTask?.executionPeriod ?: "Задач нет")
+        return notificationBuilder.setOngoing(true)
+            .setSmallIcon(R.mipmap.ic_launcher)
+            .setPriority(PRIORITY_MIN)
+            .setContentTitle(title)
+            .setContentText(text)
+            .setContentIntent(pendingIntent)
+            .setCategory(Notification.CATEGORY_SERVICE)
+            .build()
+    }
+
+    private fun getTaskNotification(task: Task,
+        notificationBuilder: NotificationCompat.Builder,
+        pendingIntent: PendingIntent
+    ): Notification{
+        val title =
+            getString(R.string.task_notification_title, task.description)
+        val text =
+            getString(R.string.task_notification_text, task.getTimeUntilEnding()[Calendar.MINUTE])
+        return notificationBuilder.setOngoing(true)
+            .setSmallIcon(R.mipmap.ic_launcher)
+            .setPriority(PRIORITY_MIN)
+            .setContentTitle(title)
+            .setContentText(text)
+            .setContentIntent(pendingIntent)
+            .setCategory(Notification.CATEGORY_SERVICE)
+            .build()
+    }
 }

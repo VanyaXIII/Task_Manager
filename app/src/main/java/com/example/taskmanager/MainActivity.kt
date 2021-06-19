@@ -6,7 +6,6 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
-import com.example.taskmanager.notifications.NotificationService
 import com.example.taskmanager.tasks.Task
 import com.example.taskmanager.tasks.TaskList
 import com.example.taskmanager.tasks.TaskManager
@@ -22,7 +21,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val taskList = TaskList(TasksFileHandler(null, this).load())
-        startNotificationService()
         val taskManager = TaskManager(taskList)
         val calendarButton= findViewById<Button>(R.id.calendarButton)
         val list : ListView = findViewById(R.id.listView)
@@ -40,8 +38,4 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun startNotificationService(){
-        val serviceIntent  = Intent(this, NotificationService::class.java)
-        startService(serviceIntent)
-    }
 }
