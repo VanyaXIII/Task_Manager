@@ -60,7 +60,6 @@ class NotificationService : Service() {
             runBlocking {
                 launch { checkForegroundNotification(foregroundNotificationBuilder, pendingIntent) }
                 launch { checkNewTasks() }
-//                launch { checkTasksNotifications(taskNotificationBuilder, pendingIntent) }
             }
         }.start()
 
@@ -89,7 +88,7 @@ class NotificationService : Service() {
     private fun updateTasksQueue() {
         if (tasksQueue.size == 0)
             return
-        while ((tasksQueue.size != 0) and (tasksQueue.first().executionPeriod.endDate < Calendar.getInstance()))
+        while ((tasksQueue.size != 0 ) and (tasksQueue.first().executionPeriod.endDate < Calendar.getInstance()))
             tasksQueue.removeFirst()
     }
 
@@ -128,21 +127,6 @@ class NotificationService : Service() {
         }
     }
 
-    private suspend fun checkTasksNotifications(
-        notificationBuilder: NotificationCompat.Builder,
-        pendingIntent: PendingIntent
-    ) {
-        while (true) {
-            delay(180000L)
-            for (task in taskList.tasks!!)
-                if ((Calendar.getInstance() > task.notificationParams.notificationTime)
-                    and (!task.notificationParams.notified)) {
-                    sendTaskNotification(getTaskNotification(task, notificationBuilder, pendingIntent))
-                }
-
-        }
-    }
-
     private fun sendTaskNotification(notification: Notification) {
         with(NotificationManagerCompat.from(this)) {
             notify(getString(R.string.notification_id).toInt(), notification)
@@ -176,7 +160,7 @@ class NotificationService : Service() {
         val title =
             getString(R.string.task_notification_title, task.description)
         val text =
-            getString(R.string.task_notification_text, task.getTimeUntilEnding()[Calendar.MINUTE])
+            getString(R.string.task_notification_text, 10)
         return notificationBuilder.setOngoing(true)
             .setSmallIcon(R.mipmap.ic_launcher)
             .setPriority(PRIORITY_MIN)

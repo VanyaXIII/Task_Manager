@@ -1,4 +1,5 @@
-package com.example.taskmanager.dates.date_utils
+
+package com.example.taskmanager.notifications
 
 import com.example.taskmanager.tasks.Task
 import com.fasterxml.jackson.annotation.JsonProperty

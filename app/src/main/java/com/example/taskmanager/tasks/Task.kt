@@ -1,7 +1,6 @@
 package com.example.taskmanager.tasks
 
 import com.example.taskmanager.dates.ExecutionPeriod
-import com.example.taskmanager.dates.date_utils.NotificationTime
 import com.example.taskmanager.dates.date_utils.doesDatesHaveSameDay
 import com.example.taskmanager.dates.date_utils.minus
 import com.example.taskmanager.utils.JsonAble
@@ -28,22 +27,11 @@ data class Task(@JsonIgnore private val _description: String = "Nothing to do") 
     @JsonProperty("isTaskDone")
     var isDone: Boolean = false
 
-    @JsonProperty("notificationParams")
-    var notificationParams : NotificationTime = NotificationTime(this)
-        set(value) {
-            field = if (value.notificationTime > executionPeriod.endDate)
-                NotificationTime(this)
-            else
-                value
-        }
-
-
     constructor(description: String, executionPeriod: ExecutionPeriod) : this(description) {
         this.executionPeriod = executionPeriod
-        notificationParams = NotificationTime(this)
     }
 
-    fun getTimeUntilEnding() : Calendar {
+    private fun getTimeUntilEnding() : Calendar {
        return executionPeriod.endDate - executionPeriod.startDate
     }
 
@@ -62,10 +50,6 @@ data class Task(@JsonIgnore private val _description: String = "Nothing to do") 
     override fun toJson(): String {
         val mapper = jacksonObjectMapper()
         return mapper.writeValueAsString(this)
-    }
-
-    fun onNotificationSent(){
-        notificationParams.notified = true
     }
 
     override fun toString(): String {
@@ -90,7 +74,6 @@ data class Task(@JsonIgnore private val _description: String = "Nothing to do") 
         if (isPriority != other.isPriority) return false
         if (executionPeriod != other.executionPeriod) return false
         if (isDone != other.isDone) return false
-        if (notificationParams != other.notificationParams) return false
 
         return true
     }
