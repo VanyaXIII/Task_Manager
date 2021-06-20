@@ -7,28 +7,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
-    
-    
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv"
+        android:layout_width="409dp"
+        android:layout_height="603dp"
+        android:layout_marginTop="128dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.constraintlayout.widget.Constraints
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
         <Button
             android:layout_width="wrap_content"
-            android:layout_height="50dp"/>
-        
-    </androidx.constraintlayout.widget.Constraints>
+            android:layout_height="50dp" />
 
-    <ListView
-        android:id="@+id/listView"
-        android:layout_width="395dp"
-        android:layout_height="563dp"
-        android:layout_weight="1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+    </androidx.constraintlayout.widget.Constraints>
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -41,19 +42,19 @@
 
         <Button
             android:id="@+id/addingBtn"
-            android:layout_marginStart="8dp"
             android:layout_width="wrap_content"
-            android:layout_marginEnd="4dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="4dp"
             android:layout_weight="1"
             android:text="По добавлению" />
 
         <Button
             android:id="@+id/executingBtn"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="4dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="8dp"
             android:layout_weight="1"
             android:text="По выполнению" />
 
@@ -63,8 +64,8 @@
         android:id="@+id/createTaskBtn"
         android:layout_width="141dp"
         android:layout_height="38dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:text="Добавить"
         app:layout_constraintBottom_toBottomOf="parent"
