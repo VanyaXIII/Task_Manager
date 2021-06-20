@@ -2,11 +2,12 @@ package com.example.taskmanager
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
+import android.view.View
+import android.widget.*
+import android.widget.AdapterView.OnItemSelectedListener
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.taskmanager.notifications.NotificationService
 import com.example.taskmanager.tasks.Task
 import com.example.taskmanager.tasks.TaskList
 import com.example.taskmanager.tasks.TaskManager
@@ -19,15 +20,43 @@ import kotlin.collections.ArrayList
 class MainActivity : AppCompatActivity() {
 
     private var date = Calendar.getInstance()
+    private var taskList = TaskList(TasksFileHandler(null, this).load())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val taskList = TaskList(TasksFileHandler(null, this).load())
+        taskList = TaskList(TasksFileHandler(null, this).load())
+        var tasks: ArrayList<Task>
         val recyclerView: RecyclerView = findViewById(R.id.rv)
         recyclerView.layoutManager = LinearLayoutManager(this)
         val taskManager = TaskManager(taskList)
-        val calendarButton = findViewById<Button>(R.id.calendarButton)
+        val spinner = findViewById<Spinner>(R.id.spinner)
+        val sortingParams = resources.getStringArray(R.array.sorting_params)
+        spinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, sortingParams)
+        val itemSelectedListener: OnItemSelectedListener = object : OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+
+                val item = parent.getItemAtPosition(position) as String
+                if (item == "По выполнению"){
+                    tasks = taskManager.getTaskListByDay(date).tasksByExTime
+                    recyclerView.adapter = RecycleViewTasksAdapter(tasks)
+                }
+                if (item == "По добавлению"){
+                    tasks = taskManager.getTaskListByDay(date).tasksByDate
+                    recyclerView.adapter = RecycleViewTasksAdapter(tasks)
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+        spinner.onItemSelectedListener = itemSelectedListener
+        recyclerView.adapter = RecycleViewTasksAdapter(ArrayList(taskManager.getTaskListByDay(date).tasks))
+        val calendarButton = findViewById<ImageView>(R.id.calender)
         calendarButton.setOnClickListener {
             DatePickerCreator(
                 this,
@@ -36,33 +65,24 @@ class MainActivity : AppCompatActivity() {
                 recyclerView
             ).setDate()
         }
-        var tasks: ArrayList<Task>
-        val addingBtn = findViewById<Button>(R.id.addingBtn)
-        val executingBtn = findViewById<Button>(R.id.executingBtn)
-        addingBtn.setOnClickListener {
-            tasks = taskManager.getTaskListByDay(date).tasksByDate
-            recyclerView.adapter = RecycleViewTasksAdapter(tasks)
-        }
-        executingBtn.setOnClickListener {
-            tasks = taskManager.getTaskListByDay(date).tasksByExTime
-            recyclerView.adapter = RecycleViewTasksAdapter(tasks)
-        }
         val creatingBtn = findViewById<Button>(R.id.createTaskBtn)
         creatingBtn.setOnClickListener {
             startActivity(Intent(this, TaskCreatingActivity::class.java))
         }
     }
 
-    companion object {
-        fun fillList(tasks: ArrayList<Task>): List<String> {
-            val stringList: ArrayList<String> = ArrayList()
-            tasks.forEach { stringList.add(it.description) }
-            return stringList
-        }
+    override fun onDestroy() {
+        super.onDestroy()
+        TasksFileHandler(taskList, this).save()
     }
 
-    private fun startNotificationService() {
-        val serviceIntent = Intent(this, NotificationService::class.java)
-        startService(serviceIntent)
+    override fun onStop() {
+        super.onStop()
+        TasksFileHandler(taskList, this).save()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        TasksFileHandler(taskList, this).save()
     }
 }

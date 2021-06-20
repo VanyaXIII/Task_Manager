@@ -47,10 +47,15 @@ data class Task(@JsonIgnore private val _description: String = "Nothing to do") 
 
     constructor(
         description: String,
+        isPriority: Boolean,
         executionPeriod: ExecutionPeriod,
-        notificationTime: NotificationTime
+        isDone : Boolean,
+        notificationTime: NotificationTime,
+
     ) : this(description, executionPeriod) {
+        this.isPriority = isPriority
         this.notificationParams = notificationTime
+        this.isDone = isDone
     }
 
     //TODO другие конструкторы
