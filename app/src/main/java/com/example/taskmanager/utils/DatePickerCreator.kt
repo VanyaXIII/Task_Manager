@@ -1,17 +1,17 @@
 package com.example.taskmanager.utils
 
-import android.R
 import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
 import android.content.Context
-import android.widget.ArrayAdapter
-import android.widget.ListView
+import androidx.recyclerview.widget.RecyclerView
 import com.example.taskmanager.tasks.TaskManager
+import com.example.taskmanager.ui.RecycleViewTasksAdapter
 import java.util.*
+import kotlin.collections.ArrayList
 
 class DatePickerCreator(
     private val context: Context, private val calender: Calendar,
-    private val taskManager: TaskManager? = null, private val list: ListView? = null
+    private val taskManager: TaskManager? = null, private val list: RecyclerView? = null
 ) {
 
 
@@ -36,7 +36,7 @@ class DatePickerCreator(
         if ((list != null) and (taskManager != null)) {
             val tasks = taskManager!!.getTaskListByDay(calender).tasks
             if (tasks != null) {
-                list!!.adapter = ArrayAdapter(context, R.layout.simple_list_item_1, tasks.toArray())
+                list!!.adapter = RecycleViewTasksAdapter(ArrayList(tasks))
             }
         }
     }
