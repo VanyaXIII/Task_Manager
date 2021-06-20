@@ -19,20 +19,20 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.util.*
+import kotlin.collections.HashSet
 
 class NotificationService : Service() {
 
     private lateinit var tasksQueue: ArrayDeque<Task>
     private lateinit var taskList: TaskList
-    private var initialSize: Int = 0
-    val context = this
+    private var currentSizeOfTaskList: Int = 0
 
 
     override fun onCreate() {
         super.onCreate()
         taskList = TaskList(TasksFileHandler(null, this).load(), true)
         tasksQueue = ArrayDeque(taskList.tasksByExTime)
-        initialSize = tasksQueue.size
+        currentSizeOfTaskList = tasksQueue.size
         updateTasksQueue()
     }
 
@@ -48,7 +48,8 @@ class NotificationService : Service() {
         val notificationIntent = Intent(this, MainActivity::class.java)
         val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0)
         val foregroundNotificationBuilder = NotificationCompat.Builder(this, foregroundChannelId)
-        val foregroundNotification = getForegroundNotification(foregroundNotificationBuilder, pendingIntent)
+        val foregroundNotification =
+            getForegroundNotification(foregroundNotificationBuilder, pendingIntent)
 
 
         val taskChannelId = createNotificationChannel("Qwerty", "Qwerty")
@@ -59,7 +60,8 @@ class NotificationService : Service() {
         Thread {
             runBlocking {
                 launch { checkForegroundNotification(foregroundNotificationBuilder, pendingIntent) }
-                launch { checkNewTasks() }
+                launch { startTasksUpdating() }
+                launch { checkTaskNotification(taskNotificationBuilder, pendingIntent) }
             }
         }.start()
 
@@ -88,7 +90,7 @@ class NotificationService : Service() {
     private fun updateTasksQueue() {
         if (tasksQueue.size == 0)
             return
-        while ((tasksQueue.size != 0 ) and (tasksQueue.first().executionPeriod.endDate < Calendar.getInstance()))
+        while ((tasksQueue.size != 0) and (tasksQueue.first().executionPeriod.endDate < Calendar.getInstance()))
             tasksQueue.removeFirst()
     }
 
@@ -96,6 +98,8 @@ class NotificationService : Service() {
         if (tasksQueue.size == 0)
             return null
         while ((tasksQueue.size != 0) and (tasksQueue.first().isDone))
+            tasksQueue.removeFirst()
+        while ((tasksQueue.size != 0) and (tasksQueue.first().executionPeriod.endDate < Calendar.getInstance()))
             tasksQueue.removeFirst()
         return tasksQueue.first()
     }
@@ -116,14 +120,50 @@ class NotificationService : Service() {
         }
     }
 
-    private suspend fun checkNewTasks() {
+    private suspend fun checkTaskNotification(
+        notificationBuilder: NotificationCompat.Builder,
+        pendingIntent: PendingIntent
+    ) {
+        while (true) {
+            delay(1000L)
+            var doSaving = false
+            loadNewTasks()
+            for (task in taskList.tasks ?: HashSet()) {
+                if ((task.notificationParams.notificationTime < Calendar.getInstance()) and (!task.notificationParams.notified)
+                    and (task.executionPeriod.endDate > Calendar.getInstance())
+                ) {
+                    doSaving = true
+                    task.notificationParams.notified = true
+                    sendTaskNotification(
+                        getTaskNotification(
+                            task,
+                            notificationBuilder,
+                            pendingIntent
+                        )
+                    )
+                }
+            }
+            if (doSaving)
+                TasksFileHandler(taskList, this).save()
+        }
+    }
+
+    private suspend fun startTasksUpdating() {
         while (true) {
             delay(500)
-            taskList = TaskList(TasksFileHandler(null, this).load(), true)
-            if (taskList.tasks?.size ?: 0 != initialSize) {
-                tasksQueue = ArrayDeque(taskList.tasksByExTime)
-                updateTasksQueue()
-            }
+            loadNewTasks()
+        }
+    }
+
+    private fun loadNewTasks() {
+        val tl = TaskList(TasksFileHandler(null, this).load())
+        if (tl.tasks?.size ?: 0 != currentSizeOfTaskList) {
+            taskList = tl
+            currentSizeOfTaskList = taskList.tasks?.size ?: 0
+            taskList.doSorting = true
+            taskList.updateSortedLists()
+            tasksQueue = ArrayDeque(taskList.tasksByExTime)
+            updateTasksQueue()
         }
     }
 
@@ -140,9 +180,15 @@ class NotificationService : Service() {
         updateTasksQueue()
         val firstUncompletedTask = getFirstUncompletedTask()
         val title =
-            getString(R.string.foreground_notification_title, firstUncompletedTask?.description ?: "Задач нет")
+            getString(
+                R.string.foreground_notification_title,
+                firstUncompletedTask?.description ?: "Задач нет"
+            )
         val text =
-            getString(R.string.foreground_notification_text, firstUncompletedTask?.executionPeriod ?: "Задач нет")
+            getString(
+                R.string.foreground_notification_text,
+                firstUncompletedTask?.executionPeriod ?: "Задач нет"
+            )
         return notificationBuilder.setOngoing(true)
             .setSmallIcon(R.mipmap.ic_launcher)
             .setPriority(PRIORITY_MIN)
@@ -153,14 +199,15 @@ class NotificationService : Service() {
             .build()
     }
 
-    private fun getTaskNotification(task: Task,
+    private fun getTaskNotification(
+        task: Task,
         notificationBuilder: NotificationCompat.Builder,
         pendingIntent: PendingIntent
-    ): Notification{
+    ): Notification {
         val title =
             getString(R.string.task_notification_title, task.description)
         val text =
-            getString(R.string.task_notification_text, 10)
+            getString(R.string.task_notification_text, task.getTimeUntilEnding()[Calendar.MINUTE])
         return notificationBuilder.setOngoing(true)
             .setSmallIcon(R.mipmap.ic_launcher)
             .setPriority(PRIORITY_MIN)

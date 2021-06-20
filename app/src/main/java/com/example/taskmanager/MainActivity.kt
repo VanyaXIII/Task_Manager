@@ -2,6 +2,7 @@ package com.example.taskmanager
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ListView
@@ -20,6 +21,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        Log.d("Cale", Calendar.getInstance()[Calendar.MINUTE].toString())
         val taskList = TaskList(TasksFileHandler(null, this).load())
         val taskManager = TaskManager(taskList)
         val calendarButton= findViewById<Button>(R.id.calendarButton)

@@ -1,19 +1,12 @@
 
 package com.example.taskmanager.notifications
 
-import com.example.taskmanager.tasks.Task
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.*
 
-class NotificationTime(task: Task){
-
-    @JsonProperty("timeToNotify")
-    var notificationTime : Calendar = task.executionPeriod.endDate.clone() as Calendar
-    var notified : Boolean = false
-
-    init {
-        notificationTime.add(Calendar.MINUTE, -15)
-    }
+class NotificationTime(
+    @JsonProperty("timeToNotify") var notificationTime: Calendar, @JsonProperty("isNotified") var notified: Boolean
+) {
 
     override fun toString(): String {
         return "${notificationTime[Calendar.DAY_OF_MONTH]} ${notificationTime[Calendar.HOUR_OF_DAY]}:${notificationTime[Calendar.MINUTE]}"

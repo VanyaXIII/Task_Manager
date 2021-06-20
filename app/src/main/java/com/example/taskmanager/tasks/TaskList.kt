@@ -7,7 +7,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashSet
 
-class TaskList(var tasks: HashSet<Task>? = HashSet(), private val doSorting: Boolean = false) :
+class TaskList(var tasks: HashSet<Task>? = HashSet(), var doSorting: Boolean = false) :
     JsonAble {
 
     var tasksByDate = ArrayList<Task>()
@@ -31,7 +31,7 @@ class TaskList(var tasks: HashSet<Task>? = HashSet(), private val doSorting: Boo
     }
 
 
-    private fun updateSortedLists() {
+    fun updateSortedLists() {
         if (doSorting) {
             tasksByDate = ArrayList(tasks?.sortedWith(TaskComparators.creatingDateComparator))
             tasksByExTime = ArrayList(tasks?.sortedWith(TaskComparators.executionPeriodComparator))

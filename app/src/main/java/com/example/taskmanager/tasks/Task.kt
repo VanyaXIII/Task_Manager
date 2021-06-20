@@ -3,13 +3,15 @@ package com.example.taskmanager.tasks
 import com.example.taskmanager.dates.ExecutionPeriod
 import com.example.taskmanager.dates.date_utils.doesDatesHaveSameDay
 import com.example.taskmanager.dates.date_utils.minus
+import com.example.taskmanager.notifications.NotificationTime
 import com.example.taskmanager.utils.JsonAble
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import java.util.*
 
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class Task(@JsonIgnore private val _description: String = "Nothing to do") : JsonAble {
 
     @JsonProperty("taskDescription")
@@ -27,12 +29,35 @@ data class Task(@JsonIgnore private val _description: String = "Nothing to do") 
     @JsonProperty("isTaskDone")
     var isDone: Boolean = false
 
+    @JsonProperty("notificationParams")
+    var notificationParams: NotificationTime = NotificationTime(executionPeriod.endDate, false)
+        set(value) {
+            field = if ((value.notificationTime > executionPeriod.endDate))
+                NotificationTime(this.executionPeriod.endDate, false)
+            else
+                value
+        }
+
     constructor(description: String, executionPeriod: ExecutionPeriod) : this(description) {
         this.executionPeriod = executionPeriod
+        val date = executionPeriod.endDate.clone() as Calendar
+        date.add(Calendar.MINUTE, -15)
+        notificationParams = NotificationTime(date, false)
     }
 
-    private fun getTimeUntilEnding() : Calendar {
-       return executionPeriod.endDate - executionPeriod.startDate
+    constructor(
+        description: String,
+        executionPeriod: ExecutionPeriod,
+        notificationTime: NotificationTime
+    ) : this(description, executionPeriod) {
+        this.notificationParams = notificationTime
+    }
+
+    //TODO другие конструкторы
+
+    @JsonIgnore
+    fun getTimeUntilEnding(): Calendar {
+        return executionPeriod.endDate.minus(Calendar.getInstance())
     }
 
     fun makePriority() {
@@ -43,7 +68,7 @@ data class Task(@JsonIgnore private val _description: String = "Nothing to do") 
         isDone = true
     }
 
-    fun doHaveSameDateWith(date : Calendar) : Boolean{
+    fun doHaveSameDateWith(date: Calendar): Boolean {
         return doesDatesHaveSameDay(executionPeriod.startDate, date)
     }
 
