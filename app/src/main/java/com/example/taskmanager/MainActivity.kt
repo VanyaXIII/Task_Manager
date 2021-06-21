@@ -28,12 +28,14 @@ import kotlin.collections.ArrayList
 class MainActivity : AppCompatActivity() {
 
     private var date = Calendar.getInstance()
-    private var taskList = TaskList(TasksFileHandler(null, this).load())
+    private var taskList: TaskList = TaskList()
     private var isRegistered = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val uid = FirebaseAuth.getInstance().currentUser!!.uid
+        taskList = TaskList(TasksFileHandler(null, this).load(uid))
         val userAuth = findViewById<ImageView>(R.id.userAuth)
         userAuth.setOnClickListener {
             if(!isRegistered){
@@ -44,7 +46,7 @@ class MainActivity : AppCompatActivity() {
             }
 
         }
-        taskList = TaskList(TasksFileHandler(null, this).load())
+        taskList = TaskList(TasksFileHandler(null, this).load(uid))
         var tasks: ArrayList<Task>
         val recyclerView: RecyclerView = findViewById(R.id.rv)
         recyclerView.layoutManager = LinearLayoutManager(this)

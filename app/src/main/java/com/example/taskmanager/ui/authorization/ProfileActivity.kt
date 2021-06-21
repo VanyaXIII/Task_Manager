@@ -6,7 +6,6 @@ import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import com.example.taskmanager.R
-import com.example.taskmanager.tasks.Task
 import com.example.taskmanager.users.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -34,10 +33,10 @@ class ProfileActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+                Log.e("cancel", error.toString())
             }
         }
-        button.setOnClickListener(){
+        button.setOnClickListener{
             user!!.setName(name.text.toString())
             dataBase!!.setValue(user)
         }

@@ -1,6 +1,9 @@
 package com.example.taskmanager.users
 
+import com.example.taskmanager.tasks.Task
+
 class User {
+    var tasks: ArrayList<Task> = ArrayList()
     private var uid = ""
     private var name = ""
     private var profilePicture = ""

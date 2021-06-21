@@ -15,6 +15,8 @@ import com.example.taskmanager.R
 import com.example.taskmanager.tasks.Task
 import com.example.taskmanager.tasks.TaskList
 import com.example.taskmanager.tasks.TasksFileHandler
+import com.example.taskmanager.users.User
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -26,11 +28,12 @@ class NotificationService : Service() {
     private lateinit var tasksQueue: ArrayDeque<Task>
     private lateinit var taskList: TaskList
     private var currentSizeOfTaskList: Int = 0
+    private val uid = FirebaseAuth.getInstance().currentUser!!.uid
 
 
     override fun onCreate() {
         super.onCreate()
-        taskList = TaskList(TasksFileHandler(null, this).load(), true)
+        taskList = TaskList(TasksFileHandler(null, this).load(uid), true)
         tasksQueue = ArrayDeque(taskList.tasksByExTime)
         currentSizeOfTaskList = tasksQueue.size
         updateTasksQueue()
@@ -167,7 +170,7 @@ class NotificationService : Service() {
     }
 
     private fun loadNewTasks() {
-        val tl = TaskList(TasksFileHandler(null, this).load())
+        val tl = TaskList(TasksFileHandler(null, this).load(FirebaseAuth.getInstance().currentUser!!.uid))
         if (tl.tasks?.size ?: 0 != currentSizeOfTaskList) {
             taskList = tl
             currentSizeOfTaskList = taskList.tasks?.size ?: 0

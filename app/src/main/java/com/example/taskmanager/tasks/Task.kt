@@ -4,18 +4,24 @@ import com.example.taskmanager.dates.ExecutionPeriod
 import com.example.taskmanager.dates.date_utils.doesDatesHaveSameDay
 import com.example.taskmanager.dates.date_utils.minus
 import com.example.taskmanager.notifications.NotificationTime
+import com.example.taskmanager.users.User
 import com.example.taskmanager.utils.JsonAble
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import java.util.*
+import kotlin.collections.ArrayList
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Task(@JsonIgnore private val _description: String = "Nothing to do") : JsonAble {
 
     @JsonProperty("taskDescription")
     val description: String = _description
+
+    var emails: ArrayList<String> = ArrayList()
+
+    var ids: ArrayList<String> = ArrayList()
 
     @JsonProperty("dateOfCreating")
     val creatingDate: Calendar = Calendar.getInstance()
