@@ -1,12 +1,10 @@
 package com.example.taskmanager.ui.authorization
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import androidx.appcompat.app.AppCompatActivity
 import com.example.taskmanager.R
-import com.example.taskmanager.tasks.Task
 import com.example.taskmanager.users.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -37,7 +35,7 @@ class ProfileActivity : AppCompatActivity() {
                 TODO("Not yet implemented")
             }
         }
-        button.setOnClickListener(){
+        button.setOnClickListener{
             user!!.setName(name.text.toString())
             dataBase!!.setValue(user)
         }

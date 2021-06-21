@@ -2,26 +2,21 @@ package com.example.taskmanager
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.*
 import android.widget.AdapterView.OnItemSelectedListener
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
+import com.example.taskmanager.dates.date_utils.minus
 import com.example.taskmanager.tasks.TaskList
 import com.example.taskmanager.tasks.TaskManager
 import com.example.taskmanager.tasks.TasksFileHandler
 import com.example.taskmanager.ui.authorization.AuthorizationActivity
 import com.example.taskmanager.ui.authorization.ProfileActivity
 import com.example.taskmanager.ui.task_creating.TaskCreatingActivity
-import com.example.taskmanager.ui.task_list.RecycleViewTasksAdapter
-import com.example.taskmanager.users.User
 import com.example.taskmanager.ui.task_list.ChoosingParams
 import com.example.taskmanager.ui.task_list.ViewPagerAdapter
 import com.example.taskmanager.utils.DatePickerCreator
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.*
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -63,10 +58,12 @@ class MainActivity : AppCompatActivity() {
                 if (item == "По выполнению"){
                     ViewPagerAdapter.choosingParams = ChoosingParams.BY_EX_TIME
                     pagerView.adapter = ViewPagerAdapter(taskManager)
+                    pagerView.currentItem = date.minus(ViewPagerAdapter.date)[Calendar.DAY_OF_YEAR] + 1
                 }
                 if (item == "По добавлению"){
                     ViewPagerAdapter.choosingParams = ChoosingParams.BY_DATE
                     pagerView.adapter = ViewPagerAdapter(taskManager)
+                    pagerView.currentItem = date.minus(ViewPagerAdapter.date)[Calendar.DAY_OF_YEAR] + 1
                 }
             }
 
