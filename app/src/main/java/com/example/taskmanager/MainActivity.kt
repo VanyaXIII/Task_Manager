@@ -12,7 +12,9 @@ import com.example.taskmanager.tasks.Task
 import com.example.taskmanager.tasks.TaskList
 import com.example.taskmanager.tasks.TaskManager
 import com.example.taskmanager.tasks.TasksFileHandler
-import com.example.taskmanager.ui.RecycleViewTasksAdapter
+import com.example.taskmanager.ui.authorization.AuthorizationActivity
+import com.example.taskmanager.ui.task_creating.TaskCreatingActivity
+import com.example.taskmanager.ui.task_list.RecycleViewTasksAdapter
 import com.example.taskmanager.utils.DatePickerCreator
 import java.util.*
 import kotlin.collections.ArrayList
@@ -25,6 +27,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val userAuth = findViewById<ImageView>(R.id.userAuth)
+        userAuth.setOnClickListener { startActivity(Intent(this, AuthorizationActivity::class.java)) }
         taskList = TaskList(TasksFileHandler(null, this).load())
         var tasks: ArrayList<Task>
         val recyclerView: RecyclerView = findViewById(R.id.rv)

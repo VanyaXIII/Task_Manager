@@ -41,8 +41,8 @@ class NotificationService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
         val foregroundChannelId = createNotificationChannel(
-            getString(R.string.notification_channel_id),
-            getString(R.string.notification_channel_name)
+            getString(R.string.foreground_notification_channel_id),
+            getString(R.string.foreground_notification_channel_name)
         )
 
         val notificationIntent = Intent(this, MainActivity::class.java)
@@ -52,7 +52,10 @@ class NotificationService : Service() {
             getForegroundNotification(foregroundNotificationBuilder, pendingIntent)
 
 
-        val taskChannelId = createNotificationChannel("Qwerty", "Qwerty")
+        val taskChannelId = createNotificationChannel(
+            getString(R.string.task_notification_channel_id),
+            getString(R.string.task_notification_channel_name)
+        )
 
         val taskNotificationBuilder = NotificationCompat.Builder(this, taskChannelId)
 

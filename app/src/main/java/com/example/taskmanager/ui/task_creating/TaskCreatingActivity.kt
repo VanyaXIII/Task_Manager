@@ -1,4 +1,4 @@
-package com.example.taskmanager
+package com.example.taskmanager.ui.task_creating
 
 import android.app.TimePickerDialog
 import android.app.TimePickerDialog.OnTimeSetListener
@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import com.example.taskmanager.MainActivity
+import com.example.taskmanager.R
 import com.example.taskmanager.dates.ExecutionPeriod
 import com.example.taskmanager.tasks.Task
 import com.example.taskmanager.tasks.TaskList

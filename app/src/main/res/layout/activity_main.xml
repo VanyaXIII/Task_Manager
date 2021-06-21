@@ -63,18 +63,28 @@
                 android:id="@+id/spinner"
                 android:layout_width="230dp"
                 android:layout_height="0dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/calender"
-                android:layout_width="73dp"
-                android:layout_height="48dp"
-                android:layout_marginTop="8dp"
+                android:layout_width="75dp"
+                android:layout_height="50dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/calender" />
+
+            <ImageView
+                android:id="@+id/userAuth"
+                android:layout_width="75dp"
+                android:layout_height="50dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/spinner"
+                app:layout_constraintStart_toEndOf="@+id/calender"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/user" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

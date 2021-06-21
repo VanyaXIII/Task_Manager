@@ -5,7 +5,7 @@ import android.app.DatePickerDialog.OnDateSetListener
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 import com.example.taskmanager.tasks.TaskManager
-import com.example.taskmanager.ui.RecycleViewTasksAdapter
+import com.example.taskmanager.ui.task_list.RecycleViewTasksAdapter
 import java.util.*
 import kotlin.collections.ArrayList
 

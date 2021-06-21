@@ -1,4 +1,4 @@
-package com.example.taskmanager.ui
+package com.example.taskmanager.ui.task_list
 
 import android.view.LayoutInflater
 import android.view.View
