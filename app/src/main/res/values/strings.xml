@@ -15,6 +15,7 @@
     <string name="foreground_notification_text">Время выполнения: %1$s</string>
     <string name="task_notification_text">До конца выполнения осталось меньше %1$d минут</string>
     <string name="task_notification_title">Поторопитесь выполнить задачу: %1$s</string>
+    <string name="pages_count">1000</string>
     <string-array name="sorting_params">
         <item>По добавлению</item>
         <item>По выполнению</item>

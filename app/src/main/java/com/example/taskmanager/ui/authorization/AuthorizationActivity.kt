@@ -10,7 +10,6 @@ import com.google.firebase.auth.FirebaseAuth
 class AuthorizationActivity : AppCompatActivity() {
 
     private var auth: FirebaseAuth = FirebaseAuth.getInstance()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }

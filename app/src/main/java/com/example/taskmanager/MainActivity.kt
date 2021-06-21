@@ -6,18 +6,16 @@ import android.view.View
 import android.widget.*
 import android.widget.AdapterView.OnItemSelectedListener
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.taskmanager.tasks.Task
+import androidx.viewpager2.widget.ViewPager2
 import com.example.taskmanager.tasks.TaskList
 import com.example.taskmanager.tasks.TaskManager
 import com.example.taskmanager.tasks.TasksFileHandler
 import com.example.taskmanager.ui.authorization.AuthorizationActivity
 import com.example.taskmanager.ui.task_creating.TaskCreatingActivity
-import com.example.taskmanager.ui.task_list.RecycleViewTasksAdapter
+import com.example.taskmanager.ui.task_list.ChoosingParams
+import com.example.taskmanager.ui.task_list.ViewPagerAdapter
 import com.example.taskmanager.utils.DatePickerCreator
 import java.util.*
-import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
 
@@ -30,10 +28,10 @@ class MainActivity : AppCompatActivity() {
         val userAuth = findViewById<ImageView>(R.id.userAuth)
         userAuth.setOnClickListener { startActivity(Intent(this, AuthorizationActivity::class.java)) }
         taskList = TaskList(TasksFileHandler(null, this).load())
-        var tasks: ArrayList<Task>
-        val recyclerView: RecyclerView = findViewById(R.id.rv)
-        recyclerView.layoutManager = LinearLayoutManager(this)
         val taskManager = TaskManager(taskList)
+        val pagerView = findViewById<ViewPager2>(R.id.viewPager)
+        pagerView.adapter = ViewPagerAdapter(taskManager)
+        pagerView.currentItem = 50
         val spinner = findViewById<Spinner>(R.id.spinner)
         val sortingParams = resources.getStringArray(R.array.sorting_params)
         spinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, sortingParams)
@@ -47,26 +45,25 @@ class MainActivity : AppCompatActivity() {
 
                 val item = parent.getItemAtPosition(position) as String
                 if (item == "По выполнению"){
-                    tasks = taskManager.getTaskListByDay(date).tasksByExTime
-                    recyclerView.adapter = RecycleViewTasksAdapter(tasks)
+                    ViewPagerAdapter.choosingParams = ChoosingParams.BY_EX_TIME
+                    pagerView.adapter = ViewPagerAdapter(taskManager)
                 }
                 if (item == "По добавлению"){
-                    tasks = taskManager.getTaskListByDay(date).tasksByDate
-                    recyclerView.adapter = RecycleViewTasksAdapter(tasks)
+                    ViewPagerAdapter.choosingParams = ChoosingParams.BY_DATE
+                    pagerView.adapter = ViewPagerAdapter(taskManager)
                 }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
         spinner.onItemSelectedListener = itemSelectedListener
-        recyclerView.adapter = RecycleViewTasksAdapter(ArrayList(taskManager.getTaskListByDay(date).tasks))
         val calendarButton = findViewById<ImageView>(R.id.calender)
         calendarButton.setOnClickListener {
             DatePickerCreator(
                 this,
                 date,
                 taskManager,
-                recyclerView
+                pagerView
             ).setDate()
         }
         val creatingBtn = findViewById<Button>(R.id.createTaskBtn)

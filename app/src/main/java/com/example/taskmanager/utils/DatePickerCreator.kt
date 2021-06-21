@@ -3,15 +3,15 @@ package com.example.taskmanager.utils
 import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
 import android.content.Context
-import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
+import com.example.taskmanager.dates.date_utils.minus
 import com.example.taskmanager.tasks.TaskManager
-import com.example.taskmanager.ui.task_list.RecycleViewTasksAdapter
+import com.example.taskmanager.ui.task_list.ViewPagerAdapter
 import java.util.*
-import kotlin.collections.ArrayList
 
 class DatePickerCreator(
     private val context: Context, private val calender: Calendar,
-    private val taskManager: TaskManager? = null, private val list: RecyclerView? = null
+    private val taskManager: TaskManager? = null, private val list: ViewPager2? = null
 ) {
 
 
@@ -36,7 +36,7 @@ class DatePickerCreator(
         if ((list != null) and (taskManager != null)) {
             val tasks = taskManager!!.getTaskListByDay(calender).tasks
             if (tasks != null) {
-                list!!.adapter = RecycleViewTasksAdapter(ArrayList(tasks))
+                list!!.currentItem = calender.minus(ViewPagerAdapter.date)[Calendar.DAY_OF_YEAR] + 1
             }
         }
     }
