@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@drawable/kayoutbg">
+    android:background="@drawable/layoutbg">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
