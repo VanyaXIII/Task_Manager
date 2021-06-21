@@ -8,23 +8,39 @@
 
     <EditText
         android:id="@+id/editTaskDescription"
-        android:layout_width="289dp"
-        android:layout_height="130dp"
+        android:layout_width="245dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="20dp"
         android:ems="10"
-        android:hint="Описание"
+        android:hint="Введите..."
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.868"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.156" />
 
     <Button
         android:id="@+id/saveBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="336dp"
+        android:layout_height="48dp"
         android:text="Сохранить"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTaskDescription" />
+        app:layout_constraintTop_toBottomOf="@+id/editTaskDescription"
+        app:layout_constraintVertical_bias="0.908" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="97dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="20dp"
+        android:fontFamily="sans-serif"
+        android:text="Описание"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/editTaskDescription"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/editTaskDescription" />
 </androidx.constraintlayout.widget.ConstraintLayout>
