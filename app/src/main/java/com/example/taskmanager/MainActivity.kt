@@ -2,6 +2,7 @@ package com.example.taskmanager
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import android.widget.AdapterView.OnItemSelectedListener
@@ -13,9 +14,14 @@ import com.example.taskmanager.tasks.TaskList
 import com.example.taskmanager.tasks.TaskManager
 import com.example.taskmanager.tasks.TasksFileHandler
 import com.example.taskmanager.ui.authorization.AuthorizationActivity
+import com.example.taskmanager.ui.authorization.ProfileActivity
 import com.example.taskmanager.ui.task_creating.TaskCreatingActivity
 import com.example.taskmanager.ui.task_list.RecycleViewTasksAdapter
+import com.example.taskmanager.users.User
 import com.example.taskmanager.utils.DatePickerCreator
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.*
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -23,12 +29,21 @@ class MainActivity : AppCompatActivity() {
 
     private var date = Calendar.getInstance()
     private var taskList = TaskList(TasksFileHandler(null, this).load())
+    private var isRegistered = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val userAuth = findViewById<ImageView>(R.id.userAuth)
-        userAuth.setOnClickListener { startActivity(Intent(this, AuthorizationActivity::class.java)) }
+        userAuth.setOnClickListener {
+            if(!isRegistered){
+                startActivity(Intent(this, AuthorizationActivity::class.java))
+                isRegistered = true
+            } else {
+                startActivity(Intent(this, ProfileActivity::class.java))
+            }
+
+        }
         taskList = TaskList(TasksFileHandler(null, this).load())
         var tasks: ArrayList<Task>
         val recyclerView: RecyclerView = findViewById(R.id.rv)
