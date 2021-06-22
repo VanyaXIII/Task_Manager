@@ -4,43 +4,122 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.task_creating.TaskCreatingActivity">
+    android:background="#FFFFFF"
+    tools:context=".TaskCreatingActivity">
 
     <EditText
-        android:id="@+id/editTaskDescription"
-        android:layout_width="245dp"
-        android:layout_height="40dp"
+        android:id="@+id/editTask"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
         android:ems="10"
         android:hint="Введите..."
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textViewTask"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.868"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.156" />
+        app:layout_constraintStart_toEndOf="@+id/textViewTask"
+        app:layout_constraintTop_toTopOf="@+id/textViewTask" />
 
     <Button
         android:id="@+id/saveBtn"
         android:layout_width="336dp"
         android:layout_height="48dp"
+        android:backgroundTint="@color/teal_200"
         android:text="Сохранить"
+        android:textColor="#000000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTaskDescription"
-        app:layout_constraintVertical_bias="0.908" />
+        app:rippleColor="#FFFFFF" />
 
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="97dp"
-        android:layout_height="36dp"
+        android:id="@+id/textViewTask"
+        android:layout_width="95dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="sans-serif"
-        android:text="Описание"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/editTaskDescription"
+        android:text="Задача:"
+        android:textColor="#000000"
+        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/editTaskDescription" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:text="Дата:"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTask" />
+
+    <EditText
+        android:id="@+id/editTaskDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Введите..."
+        android:inputType="date"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView4"
+        app:layout_constraintStart_toStartOf="@+id/editTask"
+        app:layout_constraintTop_toTopOf="@+id/textView4" />
+
+    <TextView
+        android:id="@+id/timeToDo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:text="Вермя выполнения:"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+    <EditText
+        android:id="@+id/startTime"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="начало"
+        android:inputType="time"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timeToDo" />
+
+    <EditText
+        android:id="@+id/endTime"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="конец"
+        android:inputType="time"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@+id/startTime"
+        app:layout_constraintTop_toBottomOf="@+id/timeToDo" />
+
+    <RadioButton
+        android:id="@+id/radioButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Важная"
+        android:textColor="#673AB7"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="@+id/startTime"
+        app:layout_constraintTop_toBottomOf="@+id/endTime" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
