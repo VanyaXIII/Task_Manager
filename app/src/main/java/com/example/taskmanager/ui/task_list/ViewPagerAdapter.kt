@@ -6,11 +6,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.taskmanager.R
+import com.example.taskmanager.tasks.TaskList
 import com.example.taskmanager.tasks.TaskManager
 import java.util.*
-import kotlin.collections.ArrayList
 
-class ViewPagerAdapter(private val taskManager: TaskManager) :
+class ViewPagerAdapter(private val taskManager: TaskManager, private val taskList: TaskList) :
     RecyclerView.Adapter<ViewPagerAdapter.ViewHolder>() {
 
     companion object {
@@ -46,11 +46,11 @@ class ViewPagerAdapter(private val taskManager: TaskManager) :
         newDate.add(Calendar.DAY_OF_YEAR, position)
         when (choosingParams) {
             ChoosingParams.SIMPLE -> recyclerView.adapter =
-                RecycleViewTasksAdapter(ArrayList(taskManager.getTaskListByDay(newDate).tasks))
+                RecycleViewTasksAdapter(ArrayList(taskManager.getTaskListByDay(newDate).tasks), taskList, taskManager)
             ChoosingParams.BY_DATE ->
-                recyclerView.adapter = RecycleViewTasksAdapter(taskManager.getTaskListByDay(newDate).tasksByDate)
+                recyclerView.adapter = RecycleViewTasksAdapter(taskManager.getTaskListByDay(newDate).tasksByDate, taskList, taskManager)
             ChoosingParams.BY_EX_TIME -> recyclerView.adapter =
-                RecycleViewTasksAdapter(taskManager.getTaskListByDay(newDate).tasksByExTime)
+                RecycleViewTasksAdapter(taskManager.getTaskListByDay(newDate).tasksByExTime, taskList, taskManager)
         }
         recyclerView.layoutManager = LinearLayoutManager(context)
     }

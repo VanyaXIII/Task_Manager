@@ -24,8 +24,8 @@ class ProfileActivity : AppCompatActivity() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if(dataSnapshot.exists()){
                     user = dataSnapshot.getValue(User::class.java)
-                    val text = user!!.getName()
-                    val text1 = text!!.toCharArray()
+                    val text = user!!.name
+                    val text1 = text.toCharArray()
                     name.setText(text1,0,text1.size)
                 }
 
@@ -36,7 +36,7 @@ class ProfileActivity : AppCompatActivity() {
             }
         }
         button.setOnClickListener{
-            user!!.setName(name.text.toString())
+            user!!.name = name.text.toString()
             dataBase!!.setValue(user)
         }
         dataBase!!.addValueEventListener(menuListener)

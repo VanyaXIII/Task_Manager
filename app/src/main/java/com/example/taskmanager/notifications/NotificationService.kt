@@ -126,7 +126,7 @@ class NotificationService : Service() {
         pendingIntent: PendingIntent
     ) {
         while (true) {
-            delay(500)
+            delay(800)
             notifyForeground(getForegroundNotification(notificationBuilder, pendingIntent))
         }
     }
@@ -161,21 +161,19 @@ class NotificationService : Service() {
 
     private suspend fun startTasksUpdating() {
         while (true) {
-            delay(500)
+            delay(800)
             loadNewTasks()
         }
     }
 
     private fun loadNewTasks() {
         val tl = TaskList(TasksFileHandler(null, this).load())
-        if (tl.tasks?.size ?: 0 != currentSizeOfTaskList) {
-            taskList = tl
-            currentSizeOfTaskList = taskList.tasks?.size ?: 0
-            taskList.doSorting = true
-            taskList.updateSortedLists()
-            tasksQueue = ArrayDeque(taskList.tasksByExTime)
-            updateTasksQueue()
-        }
+        taskList = tl
+        currentSizeOfTaskList = taskList.tasks?.size ?: 0
+        taskList.doSorting = true
+        taskList.updateSortedLists()
+        tasksQueue = ArrayDeque(taskList.tasksByExTime)
+        updateTasksQueue()
     }
 
     private fun sendTaskNotification(notification: Notification) {

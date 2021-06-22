@@ -29,4 +29,8 @@ class TaskManager(taskList: TaskList = TaskList(HashSet())) {
             tasksMap[dayAndYear]!!
     }
 
+    fun deleteTask(task: Task){
+        getTaskListByDay(task.executionPeriod.startDate).deleteTask(task)
+    }
+
 }

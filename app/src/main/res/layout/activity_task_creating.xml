@@ -5,22 +5,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-    tools:context=".TaskCreatingActivity">
+    tools:context=".ui.task_creating.TaskCreatingActivity">
 
     <EditText
         android:id="@+id/editTask"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="241dp"
+        android:layout_height="51dp"
         android:layout_marginEnd="20dp"
         android:ems="10"
-        android:hint="Введите..."
+        android:hint="введите..."
         android:inputType="textPersonName"
         android:textColor="#000000"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="@+id/textViewTask"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.514"
         app:layout_constraintStart_toEndOf="@+id/textViewTask"
-        app:layout_constraintTop_toTopOf="@+id/textViewTask" />
+        app:layout_constraintTop_toTopOf="@+id/textViewTask"
+        app:layout_constraintVertical_bias="0.473" />
 
     <Button
         android:id="@+id/saveBtn"
@@ -59,18 +61,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewTask" />
 
-    <EditText
+    <TextView
         android:id="@+id/editTaskDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="174dp"
+        android:layout_height="39dp"
         android:ems="10"
-        android:hint="Введите..."
+        android:hint="дата"
         android:inputType="date"
         android:textColor="#000000"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="@+id/textView4"
         app:layout_constraintStart_toStartOf="@+id/editTask"
-        app:layout_constraintTop_toTopOf="@+id/textView4" />
+        app:layout_constraintTop_toTopOf="@+id/textView4"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/timeToDo"
@@ -84,7 +87,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
-    <EditText
+    <TextView
         android:id="@+id/startTime"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
@@ -98,10 +101,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/timeToDo" />
 
-    <EditText
+    <TextView
         android:id="@+id/endTime"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
         android:layout_marginTop="20dp"
         android:ems="10"
         android:hint="конец"
@@ -111,8 +115,17 @@
         app:layout_constraintStart_toEndOf="@+id/startTime"
         app:layout_constraintTop_toBottomOf="@+id/timeToDo" />
 
+    <ImageView
+        android:id="@+id/endChoosing"
+        android:layout_width="57dp"
+        android:layout_height="52dp"
+        app:layout_constraintBottom_toBottomOf="@+id/endTime"
+        app:layout_constraintStart_toEndOf="@+id/endTime"
+        app:layout_constraintTop_toTopOf="@+id/endTime"
+        app:srcCompat="@drawable/clock" />
+
     <RadioButton
-        android:id="@+id/radioButton"
+        android:id="@+id/isPriority"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -121,5 +134,23 @@
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="@+id/startTime"
         app:layout_constraintTop_toBottomOf="@+id/endTime" />
+
+    <ImageView
+        android:id="@+id/dateChoosing"
+        android:layout_width="60dp"
+        android:layout_height="53dp"
+        android:layout_marginStart="4dp"
+        app:layout_constraintStart_toEndOf="@+id/editTaskDate"
+        app:layout_constraintTop_toBottomOf="@+id/editTask"
+        app:srcCompat="@drawable/calender" />
+
+    <ImageView
+        android:id="@+id/startChoosing"
+        android:layout_width="55dp"
+        android:layout_height="51dp"
+        app:layout_constraintBottom_toBottomOf="@+id/startTime"
+        app:layout_constraintStart_toEndOf="@+id/startTime"
+        app:layout_constraintTop_toTopOf="@+id/startTime"
+        app:srcCompat="@drawable/clock" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
