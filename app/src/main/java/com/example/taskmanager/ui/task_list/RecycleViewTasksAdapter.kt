@@ -34,7 +34,7 @@ class RecycleViewTasksAdapter(private val tasks: List<Task>) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val task = tasks[position]
         holder.descriptionView?.text = task.description
-        holder.executionView?.text = task.executionPeriod.toString()
+        holder.executionView?.text = task.getExecutionPeriod().toString()
         if (!task.isDone) {
             holder.imageView?.setImageResource(R.drawable.not_completed)
         }

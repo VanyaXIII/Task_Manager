@@ -33,7 +33,7 @@ class NotificationService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        taskList = TaskList(TasksFileHandler(null, this).load(uid), true)
+        taskList = TaskList(TasksFileHandler(null, this).load(), true)
         tasksQueue = ArrayDeque(taskList.tasksByExTime)
         currentSizeOfTaskList = tasksQueue.size
         updateTasksQueue()
@@ -96,7 +96,7 @@ class NotificationService : Service() {
     private fun updateTasksQueue() {
         if (tasksQueue.size == 0)
             return
-        while ((tasksQueue.size != 0) and (tasksQueue.first().executionPeriod.endDate < Calendar.getInstance()))
+        while ((tasksQueue.size != 0) and (tasksQueue.first().getExecutionPeriod().endDate < Calendar.getInstance()))
             tasksQueue.removeFirst()
     }
 
@@ -110,7 +110,7 @@ class NotificationService : Service() {
         }
         if (tasksQueue.size == 0)
             return null
-        while (tasksQueue.first().executionPeriod.endDate < Calendar.getInstance()) {
+        while (tasksQueue.first().getExecutionPeriod().endDate < Calendar.getInstance()) {
             tasksQueue.removeFirst()
             if (tasksQueue.size == 0)
                 break
@@ -143,11 +143,11 @@ class NotificationService : Service() {
             var doSaving = false
             loadNewTasks()
             for (task in taskList.tasks ?: HashSet()) {
-                if ((task.notificationParams.notificationTime < Calendar.getInstance()) and (!task.notificationParams.notified)
-                    and (task.executionPeriod.endDate > Calendar.getInstance())
+                if ((task.getNotificationParams().notificationTime < Calendar.getInstance()) and (!task.getNotificationParams().notified)
+                    and (task.getExecutionPeriod().endDate > Calendar.getInstance())
                 ) {
                     doSaving = true
-                    task.notificationParams.notified = true
+                    task.getNotificationParams().notified = true
                     sendTaskNotification(
                         getTaskNotification(
                             task,
@@ -170,7 +170,7 @@ class NotificationService : Service() {
     }
 
     private fun loadNewTasks() {
-        val tl = TaskList(TasksFileHandler(null, this).load(FirebaseAuth.getInstance().currentUser!!.uid))
+        val tl = TaskList(TasksFileHandler(null, this).load())
         if (tl.tasks?.size ?: 0 != currentSizeOfTaskList) {
             taskList = tl
             currentSizeOfTaskList = taskList.tasks?.size ?: 0
@@ -201,7 +201,7 @@ class NotificationService : Service() {
         val text =
             getString(
                 R.string.foreground_notification_text,
-                firstUncompletedTask?.executionPeriod ?: "Задач нет"
+                firstUncompletedTask?.getExecutionPeriod() ?: "Задач нет"
             )
         return notificationBuilder.setOngoing(true)
             .setSmallIcon(R.mipmap.ic_launcher)

@@ -17,6 +17,7 @@ import com.example.taskmanager.tasks.TasksFileHandler
 import com.example.taskmanager.users.AuthManager
 import com.example.taskmanager.users.User
 import com.example.taskmanager.utils.DatePickerCreator
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import java.util.*
@@ -27,41 +28,37 @@ import kotlin.collections.HashMap
 class TaskCreatingActivity : AppCompatActivity() {
 
     private var dateAndTime = Calendar.getInstance()
+    private var id = HashMap<String,String>() // id[user_email] = user_id
+    private var shouldAddTask = false
+    private var taskToAdd = Task()
+    val tasks = TasksFileHandler(null, this).load()
 
     public override fun onCreate(savedInstance: Bundle?) {
         super.onCreate(savedInstance)
         setContentView(R.layout.activity_task_creating)
-        val uid = FirebaseAuth.getInstance().currentUser!!.uid
+        shouldAddTask = false
         DatePickerCreator(this, dateAndTime).setDate()
         setTime()
-        val tasks = TasksFileHandler(null, this).load(uid)
-        val taskList = TaskList(tasks)
         val desc = findViewById<EditText>(R.id.editTaskDescription)
         val addButton = findViewById<Button>(R.id.addButton)
         val email = findViewById<EditText>(R.id.email)
         val btn = findViewById<Button>(R.id.saveBtn)
         val emails: ArrayList<String> = ArrayList()
-        val id: HashMap<String, String> = HashMap()
-        val existingEmails: ArrayList<String> = ArrayList()
 
         btn.setOnClickListener {
             val a : Calendar = dateAndTime.clone() as Calendar
             a.add(Calendar.HOUR_OF_DAY, 2)
             val task = Task(desc.text.toString(), ExecutionPeriod(dateAndTime, a))
-            emails.add(FirebaseAuth.getInstance().currentUser!!.email.toString())
             task.emails = emails
-            val ids: ArrayList<String> = ArrayList()
-            for(i in emails) ids.add(id[i]!!)
-            task.ids = ids
-            taskList.addTask(task)
-            TasksFileHandler(taskList, this).save()
-            TasksFileHandler(taskList, this).add(task)
+            task.emails.add(FirebaseAuth.getInstance().currentUser!!.email.toString())
+            shouldAddTask = true
+            taskToAdd = task
             startActivity(Intent(this, MainActivity::class.java))
         }
 
         addButton.setOnClickListener{
             val personEmail = email.text.toString()
-            if(isEmailValid(personEmail) && !emails.contains(personEmail) && existingEmails.contains(personEmail)){
+            if(isEmailValid(personEmail) && !emails.contains(personEmail)){
                 emails.add(personEmail)
             }
         }
@@ -70,10 +67,7 @@ class TaskCreatingActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 for(i in snapshot.children){
                     val user = i.getValue(User::class.java)
-                    val email1: String = user!!.getEmail().toString()
-                    val id1: String = user!!.getUid().toString()
-                    id[email1] = id1
-                    existingEmails.add(email1)
+                    id[user!!.getEmail().toString()] = user!!.getUid().toString()
                 }
             }
 
@@ -89,6 +83,47 @@ class TaskCreatingActivity : AppCompatActivity() {
     fun isEmailValid(email: String): Boolean {
         return email.contains("@") and email.contains(".")
     }
+
+    override fun onStop() {
+        super.onStop()
+        if(shouldAddTask) {
+            val ids = ArrayList<String>()
+            for (i in taskToAdd.emails) {
+                if (id[i] == null) {
+                    taskToAdd.emails.remove(i)
+                } else {
+                    ids.add(id[i]!!)
+                }
+            }
+            taskToAdd.ids = ids
+            val dataBase = FirebaseDatabase.getInstance().getReference("Users")
+            dataBase.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for (i in snapshot.children) {
+                        val user = i.getValue(User::class.java)
+                        if (taskToAdd.ids.contains(user!!.getUid())) {
+                            user.tasks.add(taskToAdd)
+                            dataBase.child(user.getUid().toString()).setValue(user)
+                        }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e("cancel", error.toString())
+                }
+
+            })
+            val taskList = TaskList(tasks)
+            taskList.addTask(taskToAdd)
+            taskList.update()
+            TasksFileHandler(taskList, this).save()
+            val dataBaseTasks = FirebaseDatabase.getInstance().getReference("Tasks")
+            dataBaseTasks.push().setValue(taskToAdd)
+            shouldAddTask = false
+            return
+        }
+    }
+
 
     private fun setTime() {
         TimePickerDialog(

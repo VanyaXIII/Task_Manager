@@ -34,7 +34,6 @@ class ExecutionPeriod(_startDate : Calendar = Calendar.getInstance(), _endDate :
                     "${endDate[Calendar.HOUR_OF_DAY]}:${formatMinutes(endDate[Calendar.MINUTE])}"
     }
 
-
 }
 
 

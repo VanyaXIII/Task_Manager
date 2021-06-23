@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.google.firebase.database.Exclude
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -19,33 +20,55 @@ data class Task(@JsonIgnore private val _description: String = "Nothing to do") 
     @JsonProperty("taskDescription")
     val description: String = _description
 
+    @JsonProperty("emails")
     var emails: ArrayList<String> = ArrayList()
 
+    @JsonProperty("ids")
     var ids: ArrayList<String> = ArrayList()
 
     @JsonProperty("dateOfCreating")
-    val creatingDate: Calendar = Calendar.getInstance()
+    @Exclude private var creatingDate: Calendar = Calendar.getInstance()
 
     @JsonProperty("priority")
     var isPriority: Boolean = false
 
     @JsonProperty("timePeriodToExecuteTask")
-    var executionPeriod: ExecutionPeriod = ExecutionPeriod()
+    @Exclude private var executionPeriod: ExecutionPeriod = ExecutionPeriod()
+
+    @JsonProperty("creatingDateInLong")
+    var creatingDateInLong: Long = creatingDate.timeInMillis
+
+    @JsonProperty("executionPeriodStartDate")
+    var executionPeriodStartDate: Long = executionPeriod.startDate.timeInMillis
+
+    @JsonProperty("executionPeriodEndDate")
+    var executionPeriodEndDate: Long = executionPeriod.endDate.timeInMillis
 
     @JsonProperty("isTaskDone")
     var isDone: Boolean = false
 
+
+    @Exclude
+    fun getCalendar(time: Long): Calendar{
+        val res = Calendar.getInstance()
+        res.timeInMillis = time
+        return res
+    }
+
     @JsonProperty("notificationParams")
-    var notificationParams: NotificationTime = NotificationTime(executionPeriod.endDate, false)
+    @Exclude private var notificationParams: NotificationTime = NotificationTime(this.executionPeriod.endDate, false)
         set(value) {
-            field = if ((value.notificationTime > executionPeriod.endDate))
+            field = if ((value.notificationTime > this.executionPeriod.endDate))
                 NotificationTime(this.executionPeriod.endDate, false)
             else
                 value
         }
 
+
     constructor(description: String, executionPeriod: ExecutionPeriod) : this(description) {
         this.executionPeriod = executionPeriod
+        this.executionPeriodStartDate = executionPeriod.startDate.timeInMillis
+        this.executionPeriodEndDate = executionPeriod.endDate.timeInMillis
         val date = executionPeriod.endDate.clone() as Calendar
         date.add(Calendar.MINUTE, -15)
         notificationParams = NotificationTime(date, false)
@@ -66,10 +89,42 @@ data class Task(@JsonIgnore private val _description: String = "Nothing to do") 
 
     //TODO другие конструкторы
 
+
     @JsonIgnore
+    @Exclude
     fun getTimeUntilEnding(): Calendar {
-        return executionPeriod.endDate.minus(Calendar.getInstance())
+        return this.executionPeriod.endDate.minus(Calendar.getInstance())
     }
+
+
+    @Exclude fun getCreatingDate(): Calendar{
+        return creatingDate
+    }
+
+    @Exclude fun getExecutionPeriod(): ExecutionPeriod{
+        return executionPeriod
+    }
+
+    @Exclude fun setCreatingDate(creatingDate: Calendar){
+        this.creatingDate = creatingDate
+    }
+
+    @Exclude fun setExecutionPeriod(executionPeriod: ExecutionPeriod){
+        this.executionPeriod = executionPeriod
+        this.executionPeriodStartDate = executionPeriod.startDate.timeInMillis
+        this.executionPeriodEndDate = executionPeriod.endDate.timeInMillis
+    }
+
+    @Exclude fun getNotificationParams(): NotificationTime{
+        return notificationParams
+    }
+
+    @JvmName("setNotificationParams1")
+    @Exclude fun setNotificationParams(notificationParams: NotificationTime){
+        this.notificationParams = notificationParams
+    }
+
+
 
     fun makePriority() {
         isPriority = true
@@ -79,25 +134,31 @@ data class Task(@JsonIgnore private val _description: String = "Nothing to do") 
         isDone = true
     }
 
+    @Exclude
     fun doHaveSameDateWith(date: Calendar): Boolean {
-        return doesDatesHaveSameDay(executionPeriod.startDate, date)
+        return doesDatesHaveSameDay(this.executionPeriod.startDate, date)
     }
 
+    @Exclude
     override fun toJson(): String {
         val mapper = jacksonObjectMapper()
         return mapper.writeValueAsString(this)
     }
 
+
+    @Exclude
     override fun toString(): String {
         val status = if (isDone) "Выполнено" else "Не выполнено"
         return "Описание: $description | Статус: $status \n" +
-                "Время выполнения: $executionPeriod"
+                "Время выполнения: ${this.executionPeriod}"
     }
 
+    @Exclude
     override fun hashCode(): Int {
         return creatingDate.hashCode() //может рухнуть:)
     }
 
+    @Exclude
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -108,7 +169,7 @@ data class Task(@JsonIgnore private val _description: String = "Nothing to do") 
         if (description != other.description) return false
         if (creatingDate != other.creatingDate) return false
         if (isPriority != other.isPriority) return false
-        if (executionPeriod != other.executionPeriod) return false
+        if (this.executionPeriod != other.executionPeriod) return false
         if (isDone != other.isDone) return false
 
         return true

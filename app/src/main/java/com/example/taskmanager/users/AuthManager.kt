@@ -2,6 +2,7 @@ package com.example.taskmanager.users
 
 import android.content.Intent
 import android.util.Log
+import com.example.taskmanager.tasks.Task
 import com.example.taskmanager.ui.authorization.ProfileActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -14,11 +15,15 @@ class AuthManager(private val auth: FirebaseAuth) {
 
             if(task.isSuccessful){
                 val userID = auth.currentUser!!.uid
-                val dataBase = FirebaseDatabase.getInstance().reference.child("Users")
+                val dataBase = FirebaseDatabase.getInstance().reference.child("Users").child(userID)
+                val user: HashMap<String, Any> = HashMap()
+                user["uid"] = userID
+                user["email"] = email
+                user["name"] = "unknown"
+                user["profilePicture"] = ""
+                user["tasks"] = ArrayList<Task>()
 
-                val user = User(userID,"unknown","",email)
-
-                dataBase.push().setValue(user)
+                dataBase.updateChildren(user)
             }
 
         }
@@ -38,7 +43,7 @@ class AuthManager(private val auth: FirebaseAuth) {
 
     companion object {
         fun isEmailValid(email: String): Boolean {
-            return email.contains("@") and email.contains(".")
+            return email.contains("@") and email.contains(".")//"aLWCNSONeOfALgy24MAbMR5sfEr1"
         }
     }
 

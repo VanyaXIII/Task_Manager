@@ -12,7 +12,7 @@ class TaskManager(taskList: TaskList = TaskList(HashSet())) {
     init {
         val mapOfSets: HashMap<Pair<Int, Int>, HashSet<Task>> = HashMap()
         for (task in taskList.tasks!!) {
-            val taskDate = task.executionPeriod.startDate.getDayAndYear()
+            val taskDate = task.getExecutionPeriod().startDate.getDayAndYear()
             if (mapOfSets[taskDate] == null) mapOfSets[taskDate] = HashSet()
             mapOfSets[taskDate]?.add(task)
         }

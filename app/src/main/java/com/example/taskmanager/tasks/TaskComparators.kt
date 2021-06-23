@@ -12,8 +12,8 @@ class TaskComparators {
         val creatingDateComparator = Comparator<Task> { task1, task2 ->
             operator fun Task.compareTo(other: Task): Int {
                 for (i in parameters) {
-                    if (this.creatingDate[i] > other.creatingDate[i]) return 1
-                    if (this.creatingDate[i] < other.creatingDate[i]) return -1
+                    if (this.getCreatingDate()[i] > other.getCreatingDate()[i]) return 1
+                    if (this.getCreatingDate()[i] < other.getCreatingDate()[i]) return -1
                 }
                 if (this.isPriority > other.isPriority) return 1
                 if (this.isPriority < other.isPriority) return -1
@@ -29,8 +29,8 @@ class TaskComparators {
         val executionPeriodComparator = Comparator<Task> { task1, task2 ->
             operator fun Task.compareTo(other: Task): Int {
                 for (i in parameters) {
-                    if (this.executionPeriod.startDate[i] > other.executionPeriod.startDate[i]) return 1
-                    if (this.executionPeriod.startDate[i] < other.executionPeriod.startDate[i]) return -1
+                    if (this.getExecutionPeriod().startDate[i] > other.getExecutionPeriod().startDate[i]) return 1
+                    if (this.getExecutionPeriod().startDate[i] < other.getExecutionPeriod().startDate[i]) return -1
                 }
                 if (this.isPriority > other.isPriority) return 1
                 if (this.isPriority < other.isPriority) return -1

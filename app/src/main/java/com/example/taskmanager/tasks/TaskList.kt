@@ -1,5 +1,6 @@
 package com.example.taskmanager.tasks
 
+import com.example.taskmanager.dates.ExecutionPeriod
 import com.example.taskmanager.dates.date_utils.doesDatesHaveSameDay
 import com.example.taskmanager.utils.JsonAble
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -49,8 +50,25 @@ class TaskList(var tasks: HashSet<Task>? = HashSet(), var doSorting: Boolean = f
     }
 
     private fun doHaveSameDays(task: Task, date: Calendar): Boolean {
-        return doesDatesHaveSameDay(task.executionPeriod.startDate, date)
+        return doesDatesHaveSameDay(task.getExecutionPeriod().startDate, date)
     }
+
+
+    fun update(){
+        for(task in this.tasks!!){
+            task.setExecutionPeriod(ExecutionPeriod( task.getCalendar(task.executionPeriodStartDate), task.getCalendar(task.executionPeriodEndDate)))
+            task.setCreatingDate(task.getCalendar(task.creatingDateInLong))
+        }
+        for(task in this.tasksByDate!!){
+            task.setExecutionPeriod(ExecutionPeriod( task.getCalendar(task.executionPeriodStartDate), task.getCalendar(task.executionPeriodEndDate)))
+            task.setCreatingDate(task.getCalendar(task.creatingDateInLong))
+        }
+        for(task in this.tasksByExTime!!){
+            task.setExecutionPeriod(ExecutionPeriod( task.getCalendar(task.executionPeriodStartDate), task.getCalendar(task.executionPeriodEndDate)))
+            task.setCreatingDate(task.getCalendar(task.creatingDateInLong))
+        }
+    }
+
 
 
 }

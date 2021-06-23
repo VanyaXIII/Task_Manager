@@ -4,11 +4,13 @@ import android.app.Application
 import android.content.Intent
 import com.example.taskmanager.notifications.NotificationService
 
+//import com.example.taskmanager.notifications.NotificationService
+
 class ServiceStarter : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        startNotificationService()
+        //startNotificationService()
     }
 
     private fun startNotificationService(){

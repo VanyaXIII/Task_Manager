@@ -30,12 +30,15 @@ class MainActivity : AppCompatActivity() {
     private var date = Calendar.getInstance()
     private var taskList: TaskList = TaskList()
     private var isRegistered = false
+    private var tasks: ArrayList<Task> = ArrayList()
+    private var taskManager: TaskManager = TaskManager()
+    private var recycleViewAdapter: RecycleViewTasksAdapter = RecycleViewTasksAdapter((tasks))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val uid = FirebaseAuth.getInstance().currentUser!!.uid
-        taskList = TaskList(TasksFileHandler(null, this).load(uid))
+
+        taskList = TaskList(TasksFileHandler(null, this).load())
         val userAuth = findViewById<ImageView>(R.id.userAuth)
         userAuth.setOnClickListener {
             if(!isRegistered){
@@ -46,11 +49,12 @@ class MainActivity : AppCompatActivity() {
             }
 
         }
-        taskList = TaskList(TasksFileHandler(null, this).load(uid))
-        var tasks: ArrayList<Task>
+        taskList = TaskList(TasksFileHandler(null, this).load())
+        taskManager = TaskManager(taskList)
         val recyclerView: RecyclerView = findViewById(R.id.rv)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        val taskManager = TaskManager(taskList)
+        recycleViewAdapter = RecycleViewTasksAdapter(ArrayList(taskManager.getTaskListByDay(date).tasks))
+        recyclerView.adapter = recycleViewAdapter
         val spinner = findViewById<Spinner>(R.id.spinner)
         val sortingParams = resources.getStringArray(R.array.sorting_params)
         spinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, sortingParams)
@@ -65,18 +69,19 @@ class MainActivity : AppCompatActivity() {
                 val item = parent.getItemAtPosition(position) as String
                 if (item == "По выполнению"){
                     tasks = taskManager.getTaskListByDay(date).tasksByExTime
-                    recyclerView.adapter = RecycleViewTasksAdapter(tasks)
+                    recycleViewAdapter = RecycleViewTasksAdapter(tasks)
+                    recycleViewAdapter.notifyDataSetChanged()
                 }
                 if (item == "По добавлению"){
                     tasks = taskManager.getTaskListByDay(date).tasksByDate
-                    recyclerView.adapter = RecycleViewTasksAdapter(tasks)
+                    recycleViewAdapter = RecycleViewTasksAdapter(tasks)
+                    recycleViewAdapter.notifyDataSetChanged()
                 }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
         spinner.onItemSelectedListener = itemSelectedListener
-        recyclerView.adapter = RecycleViewTasksAdapter(ArrayList(taskManager.getTaskListByDay(date).tasks))
         val calendarButton = findViewById<ImageView>(R.id.calender)
         calendarButton.setOnClickListener {
             DatePickerCreator(
@@ -91,6 +96,34 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, TaskCreatingActivity::class.java))
         }
     }
+
+    override fun onStart() {
+        super.onStart()
+        if(isRegistered){
+            val uid = FirebaseAuth.getInstance().currentUser!!.uid
+            val dataBase = FirebaseDatabase.getInstance().getReference("Users").child(uid)
+            dataBase.addValueEventListener(object: ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    Log.d("lolo", "inDataChangeMain")
+                    val user = snapshot.getValue(User::class.java)
+                    Log.d("lolo", user!!.tasks.size.toString())
+                    taskList = TaskList((user!!.haveTasksAsHashSet()))
+                    taskList.update()
+                    tasks.clear()
+                    for(i in taskList.tasks!!) tasks!!.add(i)
+                    taskManager = TaskManager(taskList)
+                    recycleViewAdapter = RecycleViewTasksAdapter(ArrayList(taskManager.getTaskListByDay(date).tasks))
+                    recycleViewAdapter.notifyDataSetChanged()
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e("cancel", error.toString())
+                }
+
+            })
+        }
+    }
+
 
     override fun onDestroy() {
         super.onDestroy()

@@ -1,6 +1,8 @@
 package com.example.taskmanager.users
 
+import com.example.taskmanager.dates.ExecutionPeriod
 import com.example.taskmanager.tasks.Task
+import com.google.firebase.database.Exclude
 
 class User {
     var tasks: ArrayList<Task> = ArrayList()
@@ -48,6 +50,16 @@ class User {
 
     fun setProfilePic(profilePicture: String){
         this.profilePicture = profilePicture
+    }
+
+    @Exclude
+    fun haveTasksAsHashSet(): HashSet<Task>{
+        val res = HashSet<Task>()
+        for (i in tasks) {
+            i.setExecutionPeriod(ExecutionPeriod(i.getCalendar(i.executionPeriodStartDate), i.getCalendar(i.executionPeriodEndDate)))
+            res.add(i)
+        }
+        return res
     }
 
 }
