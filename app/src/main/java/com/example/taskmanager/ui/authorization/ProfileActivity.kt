@@ -14,6 +14,7 @@ class ProfileActivity : AppCompatActivity() {
     private var user: User? = User()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        supportActionBar?.hide()
         setContentView(R.layout.activity_profile)
         val auth = FirebaseAuth.getInstance()
         val userID = auth.currentUser!!.uid
@@ -36,7 +37,6 @@ class ProfileActivity : AppCompatActivity() {
             }
         }
         button.setOnClickListener{
-            user!!.name = name.text.toString()
             dataBase!!.setValue(user)
         }
         dataBase!!.addValueEventListener(menuListener)

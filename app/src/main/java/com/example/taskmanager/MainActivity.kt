@@ -10,6 +10,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.taskmanager.tasks.TaskList
 import com.example.taskmanager.tasks.TaskManager
 import com.example.taskmanager.tasks.TasksFileHandler
+import com.example.taskmanager.ui.authorization.AuthorizationActivity
 import com.example.taskmanager.ui.task_creating.TaskCreatingActivity
 import com.example.taskmanager.ui.task_list.ChoosingParams
 import com.example.taskmanager.ui.task_list.ViewPagerAdapter
@@ -27,6 +28,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         supportActionBar?.hide()
         setContentView(R.layout.activity_main)
+        val userAuth = findViewById<ImageView>(R.id.userAuth)
+        userAuth.setOnClickListener { startActivity(Intent(this, AuthorizationActivity::class.java)) }
         taskList = TaskList(TasksFileHandler(null, this).load())
         val taskManager = TaskManager(taskList)
         val viewPager = findViewById<ViewPager2>(R.id.viewPager)

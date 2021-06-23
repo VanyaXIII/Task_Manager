@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.taskmanager.MainActivity
 import com.example.taskmanager.R
 import com.example.taskmanager.dates.ExecutionPeriod
+import com.example.taskmanager.dates.date_utils.formatMinutes
 import com.example.taskmanager.notifications.NotificationTime
 import com.example.taskmanager.tasks.Task
 import com.example.taskmanager.tasks.TaskList
@@ -36,12 +37,12 @@ class TaskCreatingActivity : AppCompatActivity() {
         val endImg : ImageView = findViewById(R.id.endChoosing)
         startImg.setOnClickListener {
             TimePickerCreator(this, startTime){
-                startText.text = "${startTime[Calendar.HOUR_OF_DAY]}:${startTime[Calendar.MINUTE]}"
+                startText.text = "${startTime[Calendar.HOUR_OF_DAY]}:${formatMinutes(startTime[Calendar.MINUTE])}"
             }.setTime()
         }
         endImg.setOnClickListener {
             TimePickerCreator(this, endTime){
-                endText.text = "${endTime[Calendar.HOUR_OF_DAY]}:${endTime[Calendar.MINUTE]}"
+                endText.text = "${endTime[Calendar.HOUR_OF_DAY]}:${formatMinutes(endTime[Calendar.MINUTE])}"
             }.setTime()
         }
         dateImg.setOnClickListener {
