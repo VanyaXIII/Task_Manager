@@ -11,7 +11,7 @@ import com.google.firebase.database.*
 
 class ProfileActivity : AppCompatActivity() {
     private var dataBase: DatabaseReference? = null
-    private var user: User? = User()
+    private var user: User? = User(FirebaseAuth.getInstance().currentUser)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportActionBar?.hide()
