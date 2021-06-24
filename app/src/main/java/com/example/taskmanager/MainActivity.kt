@@ -7,6 +7,7 @@ import android.widget.*
 import android.widget.AdapterView.OnItemSelectedListener
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
+import com.example.taskmanager.tasks.GroupTaskChecker
 import com.example.taskmanager.tasks.TaskList
 import com.example.taskmanager.tasks.TaskManager
 import com.example.taskmanager.tasks.TasksFileHandler
@@ -35,6 +36,9 @@ class MainActivity : AppCompatActivity() {
         val viewPager = findViewById<ViewPager2>(R.id.viewPager)
         viewPager.adapter = ViewPagerAdapter(taskManager, taskList)
         viewPager.currentItem = 50
+        GroupTaskChecker(taskList, taskManager, this){
+            viewPager.adapter!!.notifyDataSetChanged()
+        }.start()
         val spinner = findViewById<Spinner>(R.id.spinner)
         val sortingParams = resources.getStringArray(R.array.sorting_params)
         spinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, sortingParams)
@@ -51,7 +55,7 @@ class MainActivity : AppCompatActivity() {
                     ViewPagerAdapter.choosingParams = ChoosingParams.BY_EX_TIME
                     viewPager.adapter = ViewPagerAdapter(taskManager, taskList)
                     val a = date[Calendar.DAY_OF_YEAR] - ViewPagerAdapter.date[Calendar.DAY_OF_YEAR]
-                    viewPager.currentItem = 50
+                    viewPager.currentItem = a
                 }
                 if (item == "По добавлению") {
                     ViewPagerAdapter.choosingParams = ChoosingParams.BY_DATE

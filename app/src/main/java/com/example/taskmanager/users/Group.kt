@@ -1,5 +1,6 @@
 package com.example.taskmanager.users
 
+import com.example.taskmanager.database.RealtimeDatabase
 import com.example.taskmanager.tasks.TaskSnapshot
 import java.util.*
 import kotlin.collections.ArrayList
@@ -31,10 +32,12 @@ class Group {
 
     fun addTask(taskSnapshot: TaskSnapshot){
         changes.add(Change(Calendar.getInstance(), ChangeDesc.ADDED, taskSnapshot))
+        RealtimeDatabase.writeGroup(this)
     }
 
     fun deleteTask(taskSnapshot: TaskSnapshot){
         changes.add(Change(Calendar.getInstance(), ChangeDesc.DELETED, taskSnapshot))
+        RealtimeDatabase.writeGroup(this)
     }
 
 

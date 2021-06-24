@@ -11,7 +11,11 @@ class RealtimeDatabase {
 
         val database: DatabaseReference = FirebaseDatabase.getInstance().reference
 
-        fun writeUser(user: User) {
+        fun writeUser(user: User, onUserWritten: () -> Unit = {}) {
+
+            database.child("Users").child(user.id).setValue(user).addOnSuccessListener {
+                onUserWritten()
+            }
             database.child("Users").child(user.id).setValue(user)
         }
 
@@ -24,6 +28,7 @@ class RealtimeDatabase {
                 val newUser = it.getValue(User::class.java)!!
                 user.email = newUser.email
                 user.id = newUser.id
+                user.name = newUser.name
                 user.groupsId = newUser.groupsId
                 onUserGot()
             }

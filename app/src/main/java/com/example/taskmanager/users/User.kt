@@ -24,6 +24,8 @@ class User {
     constructor(firebaseUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser) {
         this.id = firebaseUser?.uid ?: ""
         this.name = firebaseUser?.displayName.toString()
+        if (this.name == "null")
+            name = ""
         this.email = firebaseUser?.email.toString()
     }
 
@@ -81,6 +83,20 @@ class User {
         groupsId.add(group.id)
         writeGroup(group)
         return group
+    }
+
+    fun joinToGroup(gId : String){
+        groupsId.add(gId)
+    }
+
+    fun getGroups(groups : ArrayList<Group> = ArrayList(), onGroupLoaded : () -> Unit = {}){
+        for (groupId in groupsId){
+            val group = Group()
+            RealtimeDatabase.readGroup(groupId, group) {
+                groups.add(group)
+                onGroupLoaded()
+            }
+        }
     }
 
 

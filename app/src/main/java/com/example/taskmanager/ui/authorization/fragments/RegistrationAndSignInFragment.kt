@@ -7,13 +7,14 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.fragment.app.Fragment
 import com.example.taskmanager.R
+import com.example.taskmanager.database.RealtimeDatabase
 import com.example.taskmanager.users.AuthManager
 import com.example.taskmanager.users.AuthManager.Companion.isEmailValid
 import com.google.firebase.auth.FirebaseAuth
 
 class RegistrationAndSignInFragment : Fragment(R.layout.fragment_login) {
 
-    companion object{
+    companion object {
         var doRegister = true
     }
 
@@ -33,10 +34,26 @@ class RegistrationAndSignInFragment : Fragment(R.layout.fragment_login) {
         })
         register.setOnClickListener {
             if (doRegister) {
-                AuthManager(auth).createUser(email.text.toString(), password.text.toString())
-            }
-            else {
-                AuthManager(auth).logIn(email.text.toString(), password.text.toString())
+                AuthManager(auth).createUser(email.text.toString(), password.text.toString()) {
+                    RealtimeDatabase.readUser(auth.currentUser!!.uid, UserInfoFragment.user) {
+
+                        activity?.supportFragmentManager?.beginTransaction()
+                            ?.add(R.id.fragment_container_view, UserInfoFragment::class.java, null)
+                            ?.commit()
+                        activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
+                    }
+                }
+
+
+            } else {
+                AuthManager(auth).logIn(email.text.toString(), password.text.toString()) {
+                    RealtimeDatabase.readUser(auth.currentUser!!.uid, UserInfoFragment.user) {
+                        activity?.supportFragmentManager?.beginTransaction()
+                            ?.add(R.id.fragment_container_view, UserInfoFragment::class.java, null)
+                            ?.commit()
+                        activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
+                    }
+                }
             }
         }
     }

@@ -7,7 +7,7 @@ enum class ChangeDesc(val desc: String) {
             return desc
         }
     },
-    DELETED("removed"){
+    DELETED("deleted"){
         override fun toString(): String {
             return desc
         }

@@ -13,12 +13,13 @@
 
         <ImageView
             android:id="@+id/profileImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:src="@drawable/user"
             android:layout_marginStart="40dp"
             android:layout_marginTop="40dp"
             android:maxWidth="100dp"
+            android:scaleType="center"
             android:maxHeight="100dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -68,6 +69,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -76,20 +78,37 @@
             app:layout_constraintTop_toBottomOf="@+id/emailLayout">
 
             <EditText
-                android:id="@+id/editTextTextPersonName"
+                android:id="@+id/photoUrl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="textPersonName"
                 android:hint="photo url"
-                android:text=""/>
+                android:inputType="textPersonName"
+                android:text="" />
 
             <Button
                 android:id="@+id/saveChanges"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Сохранить изменения" />
+
+            <Button
+                android:id="@+id/exitButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="выйти
+" />
         </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/groupList"
+            android:layout_width="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_height="400dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

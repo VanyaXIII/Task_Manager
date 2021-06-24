@@ -38,7 +38,7 @@ class RecycleViewTasksAdapter(private val tasks: ArrayList<Task>, private val ta
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView =
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.recyclerview_item, parent, false)
+                .inflate(R.layout.recyclerview_task_item, parent, false)
         return ViewHolder(itemView)
     }
 
