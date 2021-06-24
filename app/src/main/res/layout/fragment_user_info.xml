@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/teal_200"
     android:layout_height="match_parent"
     tools:context=".ui.authorization.fragments.UserInfoFragment">
 
@@ -28,7 +29,7 @@
             android:layout_width="150dp"
             android:layout_height="50dp"
             android:text=""
-            android:hint="имя"
+            android:hint="name"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:gravity="center"
             app:layout_constraintBottom_toBottomOf="@+id/profileImage"
@@ -86,9 +87,11 @@
 
             <Button
                 android:id="@+id/saveChanges"
+                android:backgroundTint="@color/toxic_green"
+                android:textColor="@color/black"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Сохранить изменения" />
+                android:text="Save changes" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
