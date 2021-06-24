@@ -9,6 +9,7 @@
     android:paddingTop="@dimen/fragment_vertical_margin"
     android:paddingRight="@dimen/fragment_horizontal_margin"
     android:paddingBottom="@dimen/fragment_vertical_margin"
+    android:background="@color/teal_200"
     tools:context=".ui.authorization.fragments.RegistrationAndSignInFragment">
 
     <EditText
@@ -52,6 +53,8 @@
         android:layout_marginBottom="64dp"
         android:enabled="false"
         android:text="@string/action_register"
+        android:textColor="@color/black"
+        android:backgroundTint="@color/toxic_green"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

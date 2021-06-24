@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/teal_200"
     tools:context=".ui.authorization.fragments.ChoosingAuthFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,6 +14,7 @@
         <LinearLayout
             android:layout_width="235dp"
             android:layout_height="100dp"
+            android:background="@color/teal_200"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -21,15 +23,21 @@
 
             <Button
                 android:id="@+id/logInBtn"
+                android:textSize="18sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Зайти" />
+                android:textColor="@color/black"
+                android:backgroundTint="@color/toxic_green"
+                android:text="SIGH IN" />
 
             <Button
                 android:id="@+id/regBtn"
+                android:textSize="18sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Зарегестрироваться" />
+                android:textColor="@color/black"
+                android:backgroundTint="@color/toxic_green"
+                android:text="SIGH UP" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
