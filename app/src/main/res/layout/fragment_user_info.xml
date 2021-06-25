@@ -98,6 +98,8 @@
             <Button
                 android:id="@+id/exitButton"
                 android:layout_width="match_parent"
+                android:backgroundTint="@color/toxic_green"
+                android:textColor="@color/black"
                 android:layout_height="wrap_content"
                 android:text="выйти
 " />

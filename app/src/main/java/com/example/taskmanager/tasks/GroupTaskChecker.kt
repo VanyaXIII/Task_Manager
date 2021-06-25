@@ -19,7 +19,7 @@ class GroupTaskChecker(
 ) {
 
     private var currentUser = FirebaseAuth.getInstance().currentUser
-    private var timeStamp : Long = 0
+    private var timeStamp : Long = TimeStamp.getTimeStamp(context)
     private var groupsLoaded  = 0
 
     fun start(){

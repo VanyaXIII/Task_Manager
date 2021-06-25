@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:backgroundTint="@color/toxic_green"
-                android:text="SIGH IN" />
+                android:text="SIGN IN" />
 
             <Button
                 android:id="@+id/regBtn"
@@ -37,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:backgroundTint="@color/toxic_green"
-                android:text="SIGH UP" />
+                android:text="SIGN UP" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
