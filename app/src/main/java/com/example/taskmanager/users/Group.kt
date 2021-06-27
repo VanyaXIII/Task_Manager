@@ -31,12 +31,14 @@ class Group {
     }
 
     fun addTask(taskSnapshot: TaskSnapshot){
-        changes.add(Change(Calendar.getInstance(), ChangeDesc.ADDED, taskSnapshot))
+        val changeId = id +"_${changes.size}"
+        changes.add(Change(changeId , ChangeDesc.ADDED, taskSnapshot))
         RealtimeDatabase.writeGroup(this)
     }
 
     fun deleteTask(taskSnapshot: TaskSnapshot){
-        changes.add(Change(Calendar.getInstance(), ChangeDesc.DELETED, taskSnapshot))
+        val changeId = id +"_${changes.size}"
+        changes.add(Change(changeId, ChangeDesc.DELETED, taskSnapshot))
         RealtimeDatabase.writeGroup(this)
     }
 

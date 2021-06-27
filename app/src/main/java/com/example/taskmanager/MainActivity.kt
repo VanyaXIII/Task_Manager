@@ -37,7 +37,9 @@ class MainActivity : AppCompatActivity() {
         viewPager.adapter = ViewPagerAdapter(taskManager, taskList)
         viewPager.currentItem = 50
         GroupTaskChecker(taskList, taskManager, this){
-            viewPager.adapter!!.notifyDataSetChanged()
+            val i = viewPager.currentItem
+            viewPager.adapter = ViewPagerAdapter(taskManager, taskList)
+            viewPager.currentItem = i
         }.start()
         val spinner = findViewById<Spinner>(R.id.spinner)
         val sortingParams = resources.getStringArray(R.array.sorting_params)

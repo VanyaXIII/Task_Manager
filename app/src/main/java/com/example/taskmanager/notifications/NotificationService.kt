@@ -93,8 +93,11 @@ class NotificationService : Service() {
     private fun updateTasksQueue() {
         if (tasksQueue.size == 0)
             return
-        while ((tasksQueue.size != 0) and (tasksQueue.first().executionPeriod.endDate < Calendar.getInstance()))
+        while ((tasksQueue.size != 0) and (tasksQueue.first().executionPeriod.endDate < Calendar.getInstance())) {
             tasksQueue.removeFirst()
+            if (tasksQueue.size == 0)
+                break
+        }
     }
 
     private fun getFirstUncompletedTask(): Task? {
@@ -112,6 +115,8 @@ class NotificationService : Service() {
             if (tasksQueue.size == 0)
                 break
         }
+        if (tasksQueue.size == 0)
+            return null
         return tasksQueue.first()
     }
 

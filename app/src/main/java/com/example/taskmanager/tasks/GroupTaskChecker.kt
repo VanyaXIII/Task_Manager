@@ -4,6 +4,7 @@ import android.content.Context
 import com.example.taskmanager.database.RealtimeDatabase
 import com.example.taskmanager.users.Group
 import com.example.taskmanager.users.User
+import com.example.taskmanager.utils.ChangesFileHandler
 import com.example.taskmanager.utils.TimeStamp
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.delay
@@ -15,12 +16,11 @@ class GroupTaskChecker(
     private val taskList: TaskList,
     private val taskManager: TaskManager,
     private val context: Context,
-    private val onTaskAdded : () -> Unit = {}
+    private val onTasksAdded : () -> Unit = {}
 ) {
 
     private var currentUser = FirebaseAuth.getInstance().currentUser
-    private var timeStamp : Long = TimeStamp.getTimeStamp(context)
-    private var groupsLoaded  = 0
+    private val mapOfChanges = ChangesFileHandler(null, context).load()
 
     fun start(){
         Thread{
@@ -45,32 +45,28 @@ class GroupTaskChecker(
             if (currentUser != null){
                 RealtimeDatabase.readUser(currentUser!!.uid, user){
                     runBlocking {
-                        groupsLoaded = 0
                         for (i in 0 until user.groupsId.size) {
-                            launch { loadGroup(user.groupsId[i], user) }
+                            launch { loadGroup(user.groupsId[i]) }
                         }
+                        ChangesFileHandler(mapOfChanges, context).save()
                     }
                 }
             }
         }
     }
 
-    private fun loadGroup(gId : String, user: User){
+    private fun loadGroup(gId : String){
         val group = Group()
         RealtimeDatabase.readGroup(gId, group){
             for (change in group.changes){
-                if (change.timeStamp > timeStamp) {
+                if (mapOfChanges[change.id] == null) {
                     val task = change.taskSnapshot.toTask()
                     taskList.addTask(task)
                     taskManager.getTaskListByDay(task.executionPeriod.startDate).addTask(task)
-                    onTaskAdded()
+                    mapOfChanges[change.id] = true
+                    onTasksAdded()
                     }
                 }
-            groupsLoaded++
-            if (groupsLoaded == user.groupsId.size){
-                timeStamp = Calendar.getInstance().timeInMillis
-                TimeStamp.setTimeStamp(timeStamp, context)
-            }
         }
     }
 
